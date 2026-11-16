@@ -3,46 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Desert Irrigation Planner - Smart Desert Farming Prototype</title>
+  <title>Desert Irrigation Planner - Smart Desert Farming Dashboard</title>
   <style>
     /* -------------------------------------------------------------
-       NEUMORPHISM (SOFT UI) DESIGN SYSTEM
+       DARK NEUMORPHISM (SOFT UI) & INTERACTIVE ANIMATIONS
        Zero external fonts, zero external libraries, 100% offline.
-       Light source: Top-Left (-135deg).
     -------------------------------------------------------------- */
     :root {
-      /* Soft Neumorphic Palette */
-      --bg: #e6ecf2;
-      --card-bg: #e6ecf2;
-      --text: #1e293b;
-      --text-muted: #64748b;
-      --text-light: #94a3b8;
-
-      /* Neumorphic Shadows */
-      --shadow-light: #ffffff;
-      --shadow-dark: #c5d0dc;
-      --shadow-dark-deep: #b0bfce;
-
-      /* Raised element shadow */
-      --neu-raised: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
-      --neu-raised-sm: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
-      --neu-raised-hover: 10px 10px 20px var(--shadow-dark), -10px -10px 20px var(--shadow-light);
+      /* Dark Neumorphic Palette */
+      --bg: #151922;
+      --card-bg: #1c222e;
+      --card-bg-light: #212938;
       
-      /* Inset (Sunken) element shadow */
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      /* Dark Neumorphic Shadows (Smooth Light / Deep Shadow) */
+      --shadow-dark: #0e1118;
+      --shadow-light: #263042;
+      --neu-raised: 8px 8px 18px var(--shadow-dark), -8px -8px 18px var(--shadow-light);
+      --neu-raised-sm: 4px 4px 10px var(--shadow-dark), -4px -4px 10px var(--shadow-light);
+      --neu-raised-hover: 10px 10px 22px var(--shadow-dark), -10px -10px 22px var(--shadow-light);
       --neu-inset: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
       --neu-inset-sm: inset 2px 2px 5px var(--shadow-dark), inset -2px -2px 5px var(--shadow-light);
 
-      /* Accent Brand Colors */
-      --accent: #059669;
-      --accent-light: #10b981;
-      --accent-soft: rgba(5, 150, 105, 0.12);
-      --warning: #d97706;
-      --danger: #dc2626;
-      --info: #2563eb;
+      /* High-Impact Vibrant Accents */
+      --accent: #10b981;
+      --accent-glow: rgba(16, 185, 129, 0.25);
+      --cyan-water: #0ea5e9;
+      --cyan-glow: rgba(14, 165, 233, 0.3);
+      --warning: #f59e0b;
+      --danger: #ef4444;
 
-      --radius: 16px;
-      --radius-sm: 10px;
+      --radius: 18px;
+      --radius-sm: 12px;
       --radius-pill: 9999px;
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     * {
@@ -57,17 +54,18 @@
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.6;
-      padding: 24px 16px;
-      font-size: 16px;
+      padding: 20px 14px 40px;
+      font-size: 15px;
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
     .container {
-      max-width: 980px;
+      max-width: 1000px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 28px;
+      gap: 22px;
     }
 
     /* ---------------- HEADER ---------------- */
@@ -75,109 +73,158 @@
       background: var(--card-bg);
       border-radius: var(--radius);
       box-shadow: var(--neu-raised);
-      padding: 24px 28px;
+      padding: 22px 26px;
       display: flex;
       flex-direction: column;
       gap: 12px;
       position: relative;
+      overflow: hidden;
     }
 
-    .header-badge-row {
+    header.neu-header::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .header-top-row {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
-    .hackathon-pill {
+    .badge-track {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       background: var(--card-bg);
       box-shadow: var(--neu-inset-sm);
-      padding: 6px 14px;
+      padding: 5px 14px;
       border-radius: var(--radius-pill);
-      font-size: 0.8rem;
-      font-weight: 700;
+      font-size: 0.78rem;
+      font-weight: 800;
       color: var(--accent);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
 
-    .badge-sim {
-      display: inline-flex;
+    .header-title-wrap {
+      display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 12px;
+    }
+
+    .app-icon-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
       background: var(--card-bg);
       box-shadow: var(--neu-inset-sm);
-      padding: 6px 14px;
-      border-radius: var(--radius-pill);
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--warning);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
 
     h1.app-title {
-      font-size: 1.85rem;
+      font-size: 1.8rem;
       font-weight: 800;
       letter-spacing: -0.02em;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      color: #ffffff;
+      line-height: 1.2;
     }
 
     .app-subtitle {
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       color: var(--text-muted);
       font-weight: 500;
-      max-width: 760px;
+      max-width: 720px;
     }
 
-    /* ---------------- QUICK PRESET PILLS ---------------- */
-    .presets-bar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 10px;
-      padding: 16px 20px;
+    /* ---------------- MULTI-PAGE NAVIGATION TABS ---------------- */
+    nav.page-nav {
       background: var(--card-bg);
       border-radius: var(--radius);
       box-shadow: var(--neu-inset-sm);
+      padding: 8px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
     }
 
-    .presets-label {
-      font-size: 0.85rem;
-      font-weight: 800;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-right: 4px;
+    @media (min-width: 680px) {
+      nav.page-nav {
+        grid-template-columns: repeat(4, 1fr);
+      }
     }
 
-    .btn-preset {
+    .tab-btn {
       border: none;
       outline: none;
-      background: var(--card-bg);
-      box-shadow: var(--neu-raised-sm);
-      color: var(--text);
-      font-size: 0.85rem;
-      font-weight: 700;
-      padding: 8px 14px;
-      border-radius: var(--radius-pill);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 800;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
       cursor: pointer;
-      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: var(--transition);
+      position: relative;
     }
 
-    .btn-preset:hover {
-      box-shadow: var(--neu-raised-hover);
+    .tab-btn:hover {
+      color: var(--text);
+    }
+
+    .tab-btn.active {
+      background: var(--card-bg);
       color: var(--accent);
+      box-shadow: var(--neu-raised-sm);
     }
 
-    .btn-preset:active {
-      box-shadow: var(--neu-inset-sm);
-      transform: translateY(1px);
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      width: 24px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    /* ---------------- PAGE CONTAINERS ---------------- */
+    .page-view {
+      display: none;
+      flex-direction: column;
+      gap: 22px;
+      animation: pageFadeIn 0.3s ease-out forwards;
+    }
+
+    .page-view.active-page {
+      display: flex;
+    }
+
+    @keyframes pageFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* ---------------- NEUMORPHIC CARDS ---------------- */
@@ -186,32 +233,84 @@
       border-radius: var(--radius);
       box-shadow: var(--neu-raised);
       padding: 24px;
+      position: relative;
     }
 
-    .card-header {
-      margin-bottom: 20px;
+    .card-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+      gap: 12px;
     }
 
     .card-title {
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       font-weight: 800;
-      color: var(--text);
+      color: #ffffff;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
     .card-desc {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: var(--text-muted);
-      margin-top: 4px;
+      margin-top: 3px;
+    }
+
+    /* ---------------- QUICK PRESET PILLS ---------------- */
+    .presets-container {
+      background: var(--card-bg);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--neu-inset-sm);
+      padding: 14px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .presets-title {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-right: 4px;
+    }
+
+    .btn-preset {
+      border: none;
+      outline: none;
+      background: var(--card-bg);
+      box-shadow: var(--neu-raised-sm);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-preset:hover {
+      color: #ffffff;
+      box-shadow: var(--neu-raised-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-preset:active {
+      box-shadow: var(--neu-inset-sm);
+      transform: translateY(1px);
+      color: var(--accent);
     }
 
     /* ---------------- INPUT GRIDS ---------------- */
     .zones-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 20px;
+      gap: 18px;
     }
 
     @media (min-width: 720px) {
@@ -224,42 +323,47 @@
       background: var(--card-bg);
       border-radius: var(--radius-sm);
       box-shadow: var(--neu-raised-sm);
-      padding: 20px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
       gap: 14px;
       position: relative;
+      transition: var(--transition);
     }
 
-    .zone-box-header {
+    .zone-box:hover {
+      box-shadow: var(--neu-raised);
+    }
+
+    .zone-box-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .zone-tag {
-      font-size: 1.15rem;
+    .zone-title {
+      font-size: 1.1rem;
       font-weight: 800;
-      color: var(--text);
+      color: #ffffff;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
 
-    .zone-status-badge {
-      font-size: 0.75rem;
+    .zone-badge-pill {
+      font-size: 0.72rem;
       font-weight: 800;
-      padding: 4px 8px;
+      padding: 3px 8px;
       border-radius: var(--radius-pill);
-      text-transform: uppercase;
       box-shadow: var(--neu-inset-sm);
-      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .badge-crit { color: var(--danger); }
     .badge-mod { color: var(--warning); }
     .badge-opt { color: var(--accent); }
-    .badge-unk { color: var(--text-muted); }
+    .badge-unk { color: var(--text-dim); }
 
     /* Inset Neumorphic Input */
     .neu-input-wrap {
@@ -270,17 +374,17 @@
 
     .neu-input {
       width: 100%;
-      height: 52px;
+      height: 48px;
       background: var(--card-bg);
       box-shadow: var(--neu-inset);
       border: 2px solid transparent;
       border-radius: var(--radius-sm);
-      padding: 10px 42px 10px 16px;
-      font-size: 1.25rem;
+      padding: 8px 40px 8px 14px;
+      font-size: 1.2rem;
       font-weight: 800;
-      color: var(--text);
+      color: #ffffff;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: var(--transition);
       appearance: textfield;
       -moz-appearance: textfield;
     }
@@ -292,8 +396,8 @@
     }
 
     .neu-input:focus {
-      border-color: rgba(5, 150, 105, 0.4);
-      box-shadow: inset 5px 5px 10px var(--shadow-dark), inset -5px -5px 10px var(--shadow-light);
+      border-color: var(--accent);
+      box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light), 0 0 10px var(--accent-glow);
     }
 
     .neu-input.input-error {
@@ -303,14 +407,20 @@
 
     .neu-suffix {
       position: absolute;
-      right: 16px;
-      font-size: 1.1rem;
+      right: 14px;
+      font-size: 1rem;
       font-weight: 800;
-      color: var(--text-muted);
+      color: var(--text-dim);
       pointer-events: none;
     }
 
-    /* Target Bar Gauge */
+    /* Live Animated Progress Bar */
+    .gauge-container {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
     .gauge-track {
       width: 100%;
       height: 8px;
@@ -324,50 +434,55 @@
     .gauge-fill {
       height: 100%;
       border-radius: var(--radius-pill);
-      transition: width 0.3s ease, background 0.3s ease;
+      transition: width 0.4s ease-out, background-color 0.3s ease;
       width: 0%;
     }
 
-    .gauge-fill.fill-critical { background: var(--danger); }
-    .gauge-fill.fill-moderate { background: var(--warning); }
-    .gauge-fill.fill-optimal { background: var(--accent); }
+    .gauge-fill.fill-critical {
+      background: linear-gradient(90deg, #b91c1c, #ef4444);
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+    }
+    .gauge-fill.fill-moderate {
+      background: linear-gradient(90deg, #b45309, #f59e0b);
+      box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+    }
+    .gauge-fill.fill-optimal {
+      background: linear-gradient(90deg, #059669, #10b981);
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+    }
 
-    .gauge-labels {
+    .gauge-marks {
       display: flex;
       justify-content: space-between;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 700;
-      color: var(--text-muted);
-      margin-top: 2px;
+      color: var(--text-dim);
     }
 
     .field-error-msg {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
       color: var(--danger);
       margin-top: 4px;
       display: none;
     }
+    .field-error-msg.visible { display: block; }
 
-    .field-error-msg.visible {
-      display: block;
-    }
-
-    /* ---------------- BUDGET & ACTIONS SECTION ---------------- */
-    .budget-action-grid {
+    /* ---------------- BUDGET & CONTROL ROW ---------------- */
+    .budget-control-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 20px;
+      gap: 18px;
       margin-top: 20px;
     }
 
-    @media (min-width: 720px) {
-      .budget-action-grid {
-        grid-template-columns: 1fr 1fr;
+    @media (min-width: 680px) {
+      .budget-control-grid {
+        grid-template-columns: 1.1fr 0.9fr;
       }
     }
 
-    .budget-card-box {
+    .budget-box {
       background: var(--card-bg);
       border-radius: var(--radius-sm);
       box-shadow: var(--neu-raised-sm);
@@ -377,7 +492,7 @@
       gap: 12px;
     }
 
-    .actions-card-box {
+    .action-box {
       background: var(--card-bg);
       border-radius: var(--radius-sm);
       box-shadow: var(--neu-raised-sm);
@@ -388,21 +503,21 @@
       gap: 12px;
     }
 
-    /* Neumorphic Buttons */
+    /* Buttons */
     button.neu-btn {
       border: none;
       outline: none;
-      min-height: 52px;
+      min-height: 48px;
       border-radius: var(--radius-sm);
-      padding: 12px 24px;
-      font-size: 1.05rem;
+      padding: 10px 20px;
+      font-size: 0.95rem;
       font-weight: 800;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      transition: all 0.15s ease;
+      gap: 8px;
+      transition: var(--transition);
     }
 
     button.btn-primary {
@@ -413,22 +528,24 @@
 
     button.btn-primary:hover {
       box-shadow: var(--neu-raised-hover);
-      color: #047857;
+      color: #34d399;
+      transform: translateY(-2px);
     }
 
     button.btn-primary:active {
       box-shadow: var(--neu-inset);
-      transform: translateY(2px);
+      transform: translateY(1px);
     }
 
     button.btn-secondary {
       background: var(--card-bg);
       box-shadow: var(--neu-raised-sm);
-      color: var(--text);
+      color: var(--text-muted);
     }
 
     button.btn-secondary:hover {
       box-shadow: var(--neu-raised-hover);
+      color: #ffffff;
     }
 
     button.btn-secondary:active {
@@ -436,82 +553,92 @@
       transform: translateY(1px);
     }
 
-    /* Withhold Warning Banner */
+    /* Bottom Page Stepper Controls */
+    .page-footer-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    /* Withhold Banner */
     .withhold-banner {
       display: none;
-      padding: 18px 24px;
+      padding: 16px 20px;
       background: var(--card-bg);
       box-shadow: var(--neu-inset);
       border-radius: var(--radius);
       color: var(--danger);
       font-weight: 700;
-      font-size: 0.95rem;
-    }
-
-    .withhold-banner.visible {
-      display: flex;
+      font-size: 0.9rem;
       align-items: center;
       gap: 12px;
     }
+    .withhold-banner.visible { display: flex; }
 
-    /* ---------------- RESULTS SECTION ---------------- */
-    #resultsSection {
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-    }
-
-    /* 1. HERO REDIRECTION HIGHLIGHT */
-    .hero-insight-card {
+    /* ---------------- PAGE 2: WATERING PRIORITY & ANIMATIONS ---------------- */
+    /* Hero Redirection Card */
+    .hero-redirection-card {
       background: var(--card-bg);
       border-radius: var(--radius);
       box-shadow: var(--neu-raised);
-      padding: 28px;
+      padding: 24px;
       position: relative;
       overflow: hidden;
     }
 
-    .insight-badge-pill {
+    .hero-redirection-card::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, var(--cyan-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .redirection-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       background: var(--card-bg);
       box-shadow: var(--neu-inset-sm);
-      padding: 6px 14px;
+      padding: 5px 12px;
       border-radius: var(--radius-pill);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 800;
-      color: var(--accent);
+      color: var(--cyan-water);
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
-    .insight-headline {
+    .redirection-headline {
       font-size: 1.45rem;
       font-weight: 800;
-      color: var(--text);
-      letter-spacing: -0.01em;
+      color: #ffffff;
       line-height: 1.35;
+      letter-spacing: -0.01em;
     }
 
-    .insight-subline {
-      font-size: 1rem;
+    .redirection-subline {
+      font-size: 0.92rem;
       color: var(--text-muted);
-      margin-top: 8px;
+      margin-top: 6px;
       line-height: 1.5;
     }
 
-    /* 2. RECOMMENDED WATERING ORDER SEQUENCE */
-    .sequence-grid {
+    /* Watering Sequence Grid */
+    .sequence-cards-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 16px;
-      margin-top: 14px;
     }
 
     @media (min-width: 680px) {
-      .sequence-grid {
+      .sequence-cards-grid {
         grid-template-columns: repeat(3, 1fr);
       }
     }
@@ -520,214 +647,294 @@
       background: var(--card-bg);
       border-radius: var(--radius-sm);
       box-shadow: var(--neu-raised-sm);
-      padding: 18px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       position: relative;
-      transition: transform 0.2s;
+      transition: var(--transition);
+      overflow: hidden;
     }
 
-    .seq-step-card.active-step {
+    .seq-step-card.active-priority {
       box-shadow: var(--neu-raised);
     }
 
-    .seq-step-header {
+    .seq-step-card.active-priority::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyan-water), var(--accent));
+      box-shadow: 0 0 10px var(--cyan-water);
+    }
+
+    .seq-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .step-order-badge {
-      font-size: 0.75rem;
+    .priority-pill {
+      font-size: 0.72rem;
       font-weight: 800;
       padding: 4px 10px;
       border-radius: var(--radius-pill);
-      background: var(--card-bg);
       box-shadow: var(--neu-inset-sm);
       text-transform: uppercase;
-      color: var(--accent);
+      color: var(--cyan-water);
     }
+    .priority-pill.skip { color: var(--text-dim); }
 
-    .step-order-badge.skip {
-      color: var(--text-muted);
-    }
-
-    .step-zone-title {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--text);
-    }
-
-    .step-amount-tag {
+    .seq-zone-title {
       font-size: 1.35rem;
       font-weight: 900;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .seq-amount-box {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .seq-amount-num {
+      font-size: 1.7rem;
+      font-weight: 900;
       color: var(--accent);
+      line-height: 1;
     }
+    .seq-amount-num.partial { color: var(--warning); }
+    .seq-amount-num.zero { color: var(--text-dim); font-size: 1.25rem; }
 
-    .step-amount-tag.zero {
-      color: var(--text-muted);
-      font-size: 1.1rem;
-    }
-
-    .step-reason-desc {
+    .seq-reason-text {
       font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    /* Valve Animation Graphic */
+    .valve-guide-box {
+      background: var(--card-bg);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--neu-inset-sm);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .valve-icon-anim {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      animation: rotatePulse 4s infinite ease-in-out;
+    }
+
+    @keyframes rotatePulse {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(15deg) scale(1.05); }
+    }
+
+    /* ---------------- PAGE 3: SIDE-BY-SIDE COMPARISON & TANK ---------------- */
+    .tank-dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 760px) {
+      .tank-dashboard-grid {
+        grid-template-columns: 240px 1fr;
+      }
+    }
+
+    /* Animated Neumorphic Water Tank */
+    .water-tank-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--neu-raised-sm);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      text-align: center;
+    }
+
+    .tank-vessel {
+      width: 110px;
+      height: 170px;
+      background: var(--card-bg);
+      box-shadow: var(--neu-inset);
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .tank-water-fluid {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+      transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+    }
+
+    .tank-water-fluid::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 0;
+      right: 0;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      animation: waveSway 2.5s infinite ease-in-out;
+    }
+
+    @keyframes waveSway {
+      0%, 100% { transform: scaleX(1); opacity: 0.5; }
+      50% { transform: scaleX(1.1); opacity: 0.8; }
+    }
+
+    .tank-stats {
+      font-size: 0.82rem;
       color: var(--text-muted);
       line-height: 1.4;
     }
 
-    /* 3. SIDE-BY-SIDE COMPARISON CARDS / TABLE */
-    .comparison-section {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      box-shadow: var(--neu-raised);
-      padding: 24px;
-    }
-
+    /* Comparison Cards List */
     .comp-cards-list {
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      margin-top: 16px;
+      gap: 14px;
     }
 
     .comp-row-card {
       background: var(--card-bg);
       border-radius: var(--radius-sm);
       box-shadow: var(--neu-raised-sm);
-      padding: 18px 20px;
+      padding: 16px 20px;
       display: grid;
       grid-template-columns: 1fr;
-      gap: 14px;
+      gap: 12px;
     }
 
-    @media (min-width: 760px) {
+    @media (min-width: 680px) {
       .comp-row-card {
-        grid-template-columns: 180px 140px 150px 1fr;
+        grid-template-columns: 140px 120px 140px 1fr;
         align-items: center;
       }
     }
 
-    .comp-cell-zone {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .comp-cell-label {
-      font-size: 0.75rem;
+    .comp-label {
+      font-size: 0.72rem;
       font-weight: 800;
-      color: var(--text-muted);
+      color: var(--text-dim);
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
 
-    .comp-cell-val {
+    .comp-val {
       font-size: 1.15rem;
       font-weight: 800;
-      color: var(--text);
+      color: #ffffff;
     }
 
-    .comp-cell-val.rec-val {
+    .comp-val.rec-val {
       color: var(--accent);
       font-size: 1.3rem;
     }
 
-    .comp-diff-pill {
+    .comp-diff-tag {
       display: inline-block;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 800;
       padding: 2px 8px;
       border-radius: var(--radius-pill);
       box-shadow: var(--neu-inset-sm);
       margin-top: 2px;
     }
+    .comp-diff-tag.gain { color: var(--accent); }
+    .comp-diff-tag.loss { color: var(--text-dim); }
 
-    .comp-diff-pill.gain { color: var(--accent); }
-    .comp-diff-pill.loss { color: var(--text-muted); }
-
-    /* SUMMARY TOTALS BAR */
-    .summary-totals-card {
-      background: var(--card-bg);
-      border-radius: var(--radius-sm);
-      box-shadow: var(--neu-inset);
-      padding: 20px;
-      margin-top: 20px;
+    /* Summary Bar */
+    .summary-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 16px;
+      gap: 14px;
+      margin-top: 14px;
     }
 
     @media (min-width: 640px) {
-      .summary-totals-card {
+      .summary-grid {
         grid-template-columns: 1fr 1fr;
       }
     }
 
-    .summary-stat-box {
+    .summary-stat-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--neu-inset);
+      padding: 16px 20px;
       display: flex;
       flex-direction: column;
       gap: 4px;
     }
 
-    .summary-stat-num {
-      font-size: 1.5rem;
+    .stat-num {
+      font-size: 1.4rem;
       font-weight: 900;
-      color: var(--text);
+      color: #ffffff;
     }
 
-    /* 4. COLLAPSIBLE SIMULATED RULES REFERENCE */
-    .rules-card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      box-shadow: var(--neu-raised);
-      padding: 24px;
-    }
-
-    .rules-grid {
+    /* ---------------- PAGE 4: DECISION GUIDE & SIMULATION RULES ---------------- */
+    .guide-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 16px;
-      margin-top: 14px;
     }
 
     @media (min-width: 640px) {
-      .rules-grid {
+      .guide-grid {
         grid-template-columns: 1fr 1fr;
       }
     }
 
-    .rule-box {
+    .guide-box {
       background: var(--card-bg);
       border-radius: var(--radius-sm);
       box-shadow: var(--neu-inset-sm);
-      padding: 16px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
       gap: 6px;
     }
 
-    .rule-box strong {
+    .guide-box strong {
       font-size: 0.95rem;
-      color: var(--text);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .rule-box p {
+    .guide-box p {
       font-size: 0.85rem;
       color: var(--text-muted);
-      line-height: 1.45;
+      line-height: 1.5;
     }
 
-    /* ---------------- FOOTER ---------------- */
-    footer {
-      text-align: center;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      padding: 20px 0 30px;
-    }
-
-    /* Hidden elements for compatibility with test assertions */
+    /* Screen Reader / Test Compatibility */
     .sr-only-table {
       position: absolute;
       width: 1px;
@@ -738,324 +945,459 @@
       clip: rect(0, 0, 0, 0);
       border: 0;
     }
+
+    /* ---------------- FOOTER ---------------- */
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      font-weight: 600;
+      padding: 16px 0 24px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- NEUMORPHIC HEADER -->
+    <!-- DARK NEUMORPHIC HEADER -->
     <header class="neu-header">
-      <div class="header-badge-row">
-        <span class="hackathon-pill">🌵 Breaking Bytes &bull; Smart Farming for the Desert</span>
-        <span class="badge-sim">⚡ Simulated Decision Rules</span>
+      <div class="header-top-row">
+        <span class="badge-track">🌵 Breaking Bytes &bull; Smart Farming for the Desert</span>
+        <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-dim);">Offline Ready &bull; Zero CDN</span>
       </div>
-      <h1 class="app-title">Desert Irrigation Planner</h1>
-      <p class="app-subtitle">
-        A clean decision-support dashboard for small desert greenhouse growers. Intelligently redirects limited daily water supplies from saturated soil directly to thirsty crops.
-      </p>
+      <div class="header-title-wrap">
+        <div class="app-icon-badge" aria-hidden="true">
+          <!-- Stylized Desert Droplet SVG -->
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="app-title">Desert Irrigation Planner</h1>
+          <p class="app-subtitle">
+            Smart, constrained water allocation for small desert greenhouse agriculture.
+          </p>
+        </div>
+      </div>
     </header>
 
-    <!-- QUICK PRESETS FOR JUDGES -->
-    <nav class="presets-bar" aria-label="Quick Verification Scenarios">
-      <span class="presets-label">⚡ Judge Quick Scenarios:</span>
-      <button type="button" class="btn-preset" onclick="loadScenario('default')">Default (30 L)</button>
-      <button type="button" class="btn-preset" onclick="loadScenario('missingC')">Missing Sensor C</button>
-      <button type="button" class="btn-preset" onclick="loadScenario('budget15')">15 L Budget (Low)</button>
-      <button type="button" class="btn-preset" onclick="loadScenario('budget0')">0 L Budget</button>
-      <button type="button" class="btn-preset" onclick="loadScenario('aboveTarget')">All Above Target</button>
-      <button type="button" class="btn-preset" onclick="loadScenario('equalReadings')">Equal Deficits</button>
-      <button type="button" class="btn-preset" onclick="loadScenario('zeroMoisture')">0% Severe Drought</button>
+    <!-- 4-STEP TAB NAVIGATION BAR -->
+    <nav class="page-nav" aria-label="Application Sections">
+      <button type="button" class="tab-btn active" id="tabBtn1" onclick="switchPage(1)">
+        <span>1.</span> Greenhouse Setup
+      </button>
+      <button type="button" class="tab-btn" id="tabBtn2" onclick="switchPage(2)">
+        <span>2.</span> Priority Plan
+      </button>
+      <button type="button" class="tab-btn" id="tabBtn3" onclick="switchPage(3)">
+        <span>3.</span> Comparison
+      </button>
+      <button type="button" class="tab-btn" id="tabBtn4" onclick="switchPage(4)">
+        <span>4.</span> Decision Rules
+      </button>
     </nav>
 
-    <!-- INPUTS PANEL -->
-    <section class="neu-card" aria-labelledby="inputsTitle">
-      <div class="card-header">
-        <h2 id="inputsTitle" class="card-title">1. Greenhouse Starting Conditions</h2>
-        <p class="card-desc">
-          Enter current soil moisture percentages (0–100%) for each zone. Leave blank if a sensor is offline.
-        </p>
-      </div>
-
-      <form id="irrigationForm" onsubmit="event.preventDefault(); handleMakePlan();" novalidate>
-        <!-- 3 ZONES GRID -->
-        <div class="zones-grid">
-          <!-- Zone A -->
-          <div class="zone-box">
-            <div class="zone-box-header">
-              <span class="zone-tag">🌱 Zone A</span>
-              <span id="badgeA" class="zone-status-badge badge-opt">Above Target</span>
-            </div>
-            <div class="neu-input-wrap">
-              <input
-                type="number"
-                id="moistureA"
-                name="moistureA"
-                class="neu-input"
-                min="0"
-                max="100"
-                step="any"
-                placeholder="e.g. 32"
-                value="32"
-                aria-describedby="errMoistureA"
-                oninput="handleLiveInput()"
-              >
-              <span class="neu-suffix">%</span>
-            </div>
-            <div class="gauge-track">
-              <div id="gaugeA" class="gauge-fill fill-optimal" style="width: 32%;"></div>
-            </div>
-            <div class="gauge-labels">
-              <span>0%</span>
-              <span>Target: 25%</span>
-              <span>100%</span>
-            </div>
-            <div id="errMoistureA" class="field-error-msg" role="alert"></div>
-          </div>
-
-          <!-- Zone B -->
-          <div class="zone-box">
-            <div class="zone-box-header">
-              <span class="zone-tag">🌿 Zone B</span>
-              <span id="badgeB" class="zone-status-badge badge-mod">Moderate Deficit</span>
-            </div>
-            <div class="neu-input-wrap">
-              <input
-                type="number"
-                id="moistureB"
-                name="moistureB"
-                class="neu-input"
-                min="0"
-                max="100"
-                step="any"
-                placeholder="e.g. 22"
-                value="22"
-                aria-describedby="errMoistureB"
-                oninput="handleLiveInput()"
-              >
-              <span class="neu-suffix">%</span>
-            </div>
-            <div class="gauge-track">
-              <div id="gaugeB" class="gauge-fill fill-moderate" style="width: 22%;"></div>
-            </div>
-            <div class="gauge-labels">
-              <span>0%</span>
-              <span>Target: 25%</span>
-              <span>100%</span>
-            </div>
-            <div id="errMoistureB" class="field-error-msg" role="alert"></div>
-          </div>
-
-          <!-- Zone C -->
-          <div class="zone-box">
-            <div class="zone-box-header">
-              <span class="zone-tag">🌾 Zone C</span>
-              <span id="badgeC" class="zone-status-badge badge-crit">Critical Deficit</span>
-            </div>
-            <div class="neu-input-wrap">
-              <input
-                type="number"
-                id="moistureC"
-                name="moistureC"
-                class="neu-input"
-                min="0"
-                max="100"
-                step="any"
-                placeholder="e.g. 15"
-                value="15"
-                aria-describedby="errMoistureC"
-                oninput="handleLiveInput()"
-              >
-              <span class="neu-suffix">%</span>
-            </div>
-            <div class="gauge-track">
-              <div id="gaugeC" class="gauge-fill fill-critical" style="width: 15%;"></div>
-            </div>
-            <div class="gauge-labels">
-              <span>0%</span>
-              <span>Target: 25%</span>
-              <span>100%</span>
-            </div>
-            <div id="errMoistureC" class="field-error-msg" role="alert"></div>
-          </div>
-        </div>
-
-        <!-- BUDGET & ACTION CONTROLS -->
-        <div class="budget-action-grid">
-          <div class="budget-card-box">
-            <div class="zone-box-header">
-              <span class="zone-tag">💧 Daily Water Budget</span>
-              <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">Whole Litres</span>
-            </div>
-            <div class="neu-input-wrap">
-              <input
-                type="number"
-                id="waterBudget"
-                name="waterBudget"
-                class="neu-input"
-                min="0"
-                step="1"
-                placeholder="e.g. 30"
-                value="30"
-                aria-describedby="errBudget"
-                oninput="handleLiveInput()"
-              >
-              <span class="neu-suffix">L</span>
-            </div>
-            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">
-              Usual routine divides this equally (10 L each). Recommended plan prioritizes critical deficit zones first.
-            </p>
-            <div id="errBudget" class="field-error-msg" role="alert"></div>
-          </div>
-
-          <div class="actions-card-box">
-            <button type="submit" class="neu-btn btn-primary" id="btnMakePlan">
-              ⚡ Make Watering Plan
-            </button>
-            <button type="button" class="neu-btn btn-secondary" id="btnLoadDemo" onclick="loadDemoValues()">
-              ↺ Load Demo Example
-            </button>
-          </div>
-        </div>
-      </form>
-    </section>
-
-    <!-- ERROR BANNER -->
+    <!-- ERROR WITHHOLD BANNER (Visible on all tabs if error occurs) -->
     <div id="withholdBanner" class="withhold-banner" role="alert">
-      <span style="font-size: 1.5rem;">⚠️</span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
       <div>
-        <strong>Planning Paused:</strong> Please fix the invalid inputs marked above. A watering plan cannot be generated until all provided readings and the water budget are valid.
+        <strong>Planning Paused:</strong> Please fix the marked invalid fields in Setup. A watering plan cannot be generated until all readings and the water budget are valid.
       </div>
     </div>
 
-    <!-- RESULTS SECTION -->
-    <div id="resultsSection">
-      <!-- 1. HERO REDIRECTION HIGHLIGHT CARD -->
-      <section class="hero-insight-card" aria-labelledby="insightHeading">
-        <span class="insight-badge-pill">✨ Water Redirection Analysis</span>
-        <h2 id="insightHeading" class="insight-headline">
-          <span id="redirectionMessage">10 L redirected from an already-moist zone to the driest zone.</span>
-        </h2>
-        <p id="redirectionSubMessage" class="insight-subline">
-          Zone A is at 32% (≥25% target). Its usual 10 L allocation was redirected entirely to Zone C (15% moisture), delivering water where deficit is greatest.
-        </p>
-      </section>
+    <!-- MAIN FORM & TABBED PAGES -->
+    <form id="irrigationForm" onsubmit="event.preventDefault(); handleMakePlan();" novalidate>
 
-      <!-- 2. RECOMMENDED WATERING SEQUENCE -->
-      <section class="neu-card" aria-labelledby="seqTitle">
-        <div class="card-header">
-          <h2 id="seqTitle" class="card-title">2. Recommended Watering Priority Order</h2>
-          <p class="card-desc">
-            Open irrigation valves in this exact sequence to protect the most stressed crops before today's budget is depleted:
-          </p>
-        </div>
-        <div id="wateringSequence" class="sequence-grid" aria-live="polite">
-          <!-- Dynamically populated step cards -->
-        </div>
-      </section>
-
-      <!-- 3. SIDE-BY-SIDE SCHEDULE COMPARISON -->
-      <section class="comparison-section" aria-labelledby="compTitle">
-        <div class="card-header">
-          <h2 id="compTitle" class="card-title">3. Side-by-Side Schedule Comparison</h2>
-          <p class="card-desc">
-            Compare the conventional equal-split schedule against the simulated smart priority recommendation:
-          </p>
+      <!-- ================= PAGE 1: SENSOR & BUDGET SETUP ================= -->
+      <div id="page1" class="page-view active-page">
+        <!-- QUICK PRESETS -->
+        <div class="presets-container" aria-label="Judge Test Scenarios">
+          <span class="presets-title">⚡ Quick Scenarios:</span>
+          <button type="button" class="btn-preset" onclick="loadScenario('default')">Default (30 L)</button>
+          <button type="button" class="btn-preset" onclick="loadScenario('missingC')">Missing Sensor C</button>
+          <button type="button" class="btn-preset" onclick="loadScenario('budget15')">15 L Budget (Low)</button>
+          <button type="button" class="btn-preset" onclick="loadScenario('budget0')">0 L Budget</button>
+          <button type="button" class="btn-preset" onclick="loadScenario('aboveTarget')">All Above Target</button>
+          <button type="button" class="btn-preset" onclick="loadScenario('equalReadings')">Equal Deficits</button>
+          <button type="button" class="btn-preset" onclick="loadScenario('zeroMoisture')">0% Drought</button>
         </div>
 
-        <div id="comparisonCardsContainer" class="comp-cards-list">
-          <!-- Dynamically populated comparison rows -->
-        </div>
+        <!-- ZONE INPUTS CARD -->
+        <section class="neu-card" aria-labelledby="zonesTitle">
+          <div class="card-header-bar">
+            <div>
+              <h2 id="zonesTitle" class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                Soil Moisture Sensor Readings
+              </h2>
+              <p class="card-desc">Enter each zone's moisture percentage (0–100%). Leave blank if a sensor is offline.</p>
+            </div>
+          </div>
 
-        <!-- Hidden table to satisfy screen readers & test assertions -->
-        <table class="sr-only-table" aria-hidden="true">
-          <tbody id="comparisonTableBody"></tbody>
-        </table>
-
-        <!-- SUMMARY TOTALS -->
-        <div class="summary-totals-card">
-          <div class="summary-stat-box">
-            <span class="comp-cell-label">Total Water Allocated</span>
-            <div style="display: flex; gap: 20px; align-items: baseline; margin-top: 4px;">
-              <div>
-                <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 700;">Usual: </span>
-                <span id="usualTotalAlloc" class="summary-stat-num">30 L</span>
+          <div class="zones-grid">
+            <!-- Zone A -->
+            <div class="zone-box">
+              <div class="zone-box-top">
+                <span class="zone-title">🌱 Zone A</span>
+                <span id="badgeA" class="zone-badge-pill badge-opt">Above Target</span>
               </div>
+              <div class="neu-input-wrap">
+                <input
+                  type="number"
+                  id="moistureA"
+                  name="moistureA"
+                  class="neu-input"
+                  min="0"
+                  max="100"
+                  step="any"
+                  placeholder="e.g. 32"
+                  value="32"
+                  aria-describedby="errMoistureA"
+                  oninput="handleLiveInput()"
+                >
+                <span class="neu-suffix">%</span>
+              </div>
+              <div class="gauge-container">
+                <div class="gauge-track">
+                  <div id="gaugeA" class="gauge-fill fill-optimal" style="width: 32%;"></div>
+                </div>
+                <div class="gauge-marks">
+                  <span>0%</span>
+                  <span>Target: 25%</span>
+                  <span>100%</span>
+                </div>
+              </div>
+              <div id="errMoistureA" class="field-error-msg" role="alert"></div>
+            </div>
+
+            <!-- Zone B -->
+            <div class="zone-box">
+              <div class="zone-box-top">
+                <span class="zone-title">🌿 Zone B</span>
+                <span id="badgeB" class="zone-badge-pill badge-mod">Moderate Deficit</span>
+              </div>
+              <div class="neu-input-wrap">
+                <input
+                  type="number"
+                  id="moistureB"
+                  name="moistureB"
+                  class="neu-input"
+                  min="0"
+                  max="100"
+                  step="any"
+                  placeholder="e.g. 22"
+                  value="22"
+                  aria-describedby="errMoistureB"
+                  oninput="handleLiveInput()"
+                >
+                <span class="neu-suffix">%</span>
+              </div>
+              <div class="gauge-container">
+                <div class="gauge-track">
+                  <div id="gaugeB" class="gauge-fill fill-moderate" style="width: 22%;"></div>
+                </div>
+                <div class="gauge-marks">
+                  <span>0%</span>
+                  <span>Target: 25%</span>
+                  <span>100%</span>
+                </div>
+              </div>
+              <div id="errMoistureB" class="field-error-msg" role="alert"></div>
+            </div>
+
+            <!-- Zone C -->
+            <div class="zone-box">
+              <div class="zone-box-top">
+                <span class="zone-title">🌾 Zone C</span>
+                <span id="badgeC" class="zone-badge-pill badge-crit">Critical Deficit</span>
+              </div>
+              <div class="neu-input-wrap">
+                <input
+                  type="number"
+                  id="moistureC"
+                  name="moistureC"
+                  class="neu-input"
+                  min="0"
+                  max="100"
+                  step="any"
+                  placeholder="e.g. 15"
+                  value="15"
+                  aria-describedby="errMoistureC"
+                  oninput="handleLiveInput()"
+                >
+                <span class="neu-suffix">%</span>
+              </div>
+              <div class="gauge-container">
+                <div class="gauge-track">
+                  <div id="gaugeC" class="gauge-fill fill-critical" style="width: 15%;"></div>
+                </div>
+                <div class="gauge-marks">
+                  <span>0%</span>
+                  <span>Target: 25%</span>
+                  <span>100%</span>
+                </div>
+              </div>
+              <div id="errMoistureC" class="field-error-msg" role="alert"></div>
+            </div>
+          </div>
+
+          <!-- BUDGET & ACTIONS -->
+          <div class="budget-control-grid">
+            <div class="budget-box">
+              <div class="zone-box-top">
+                <span class="zone-title">💧 Today's Water Supply</span>
+                <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-dim);">Whole Litres</span>
+              </div>
+              <div class="neu-input-wrap">
+                <input
+                  type="number"
+                  id="waterBudget"
+                  name="waterBudget"
+                  class="neu-input"
+                  min="0"
+                  step="1"
+                  placeholder="e.g. 30"
+                  value="30"
+                  aria-describedby="errBudget"
+                  oninput="handleLiveInput()"
+                >
+                <span class="neu-suffix">Litres</span>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">
+                Usual schedule divides this equally (10 L each). Recommended plan prioritizes critical deficit zones.
+              </p>
+              <div id="errBudget" class="field-error-msg" role="alert"></div>
+            </div>
+
+            <div class="action-box">
+              <button type="submit" class="neu-btn btn-primary" id="btnMakePlan" onclick="handleMakePlan(); switchPage(2);">
+                ⚡ Calculate &amp; View Priority Plan &rarr;
+              </button>
+              <button type="button" class="neu-btn btn-secondary" id="btnLoadDemo" onclick="loadDemoValues()">
+                ↺ Reset Default Demo
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <div class="page-footer-nav" style="justify-content: flex-end;">
+          <button type="button" class="neu-btn btn-secondary" onclick="switchPage(2)">
+            Next: Priority Plan &rarr;
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= PAGE 2: PRIORITY WATERING PLAN ================= -->
+      <div id="page2" class="page-view">
+        <div id="resultsSection" style="display: flex; flex-direction: column; gap: 20px;">
+          <!-- HERO REDIRECTION HIGHLIGHT CARD -->
+          <section class="hero-redirection-card" aria-labelledby="redirectionTitle">
+            <span class="redirection-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+              Budget Efficiency Redirection
+            </span>
+            <h2 id="redirectionTitle" class="redirection-headline">
+              <span id="redirectionMessage">10 L redirected from an already-moist zone to the driest zone.</span>
+            </h2>
+            <p id="redirectionSubMessage" class="redirection-subline">
+              Zone A is at 32% (≥25% target). Its usual 10 L allocation was redirected entirely to Zone C (15% moisture), delivering water where deficit is greatest.
+            </p>
+          </section>
+
+          <!-- RECOMMENDED WATERING SEQUENCE -->
+          <section class="neu-card" aria-labelledby="sequenceTitle">
+            <div class="card-header-bar">
               <div>
-                <span style="font-size: 0.85rem; color: var(--accent); font-weight: 700;">Recommended: </span>
-                <span id="recTotalAlloc" class="summary-stat-num" style="color: var(--accent);">30 L</span>
+                <h2 id="sequenceTitle" class="card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  Recommended Watering Sequence
+                </h2>
+                <p class="card-desc">Execute in this sequence to protect the most stressed crops before today's water supply runs out:</p>
               </div>
             </div>
-            <span id="allocComparisonSummary" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
-              All allocated water is actively used for crop deficit relief.
-            </span>
-          </div>
 
-          <div class="summary-stat-box">
-            <span class="comp-cell-label">Water Left in Storage Tank</span>
-            <div style="display: flex; gap: 20px; align-items: baseline; margin-top: 4px;">
-              <div>
-                <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 700;">Usual: </span>
-                <span id="usualWaterLeft" class="summary-stat-num">0 L</span>
+            <div id="wateringSequence" class="sequence-cards-grid" aria-live="polite">
+              <!-- Dynamically populated sequence cards -->
+            </div>
+
+            <!-- Animated Valve Guidance Box -->
+            <div class="valve-guide-box" style="margin-top: 18px;">
+              <div class="valve-icon-anim" aria-hidden="true">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <line x1="12" y1="3" x2="12" y2="7"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                  <line x1="3" y1="12" x2="7" y2="12"></line>
+                  <line x1="17" y1="12" x2="21" y2="12"></line>
+                </svg>
               </div>
               <div>
-                <span style="font-size: 0.85rem; color: var(--accent); font-weight: 700;">Recommended: </span>
-                <span id="recWaterLeft" class="summary-stat-num" style="color: var(--accent);">0 L</span>
+                <strong style="color: #ffffff; font-size: 0.95rem;">Operator Flow Tip:</strong>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">
+                  Open valve lines strictly one by one in recommended order. If supply pressure drops or tank runs dry early, critical root zones are already secured.
+                </p>
               </div>
             </div>
-            <span id="reserveSummary" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
-              Entire water budget was allocated to active deficits.
-            </span>
-          </div>
+          </section>
         </div>
-      </section>
 
-      <!-- 4. TRANSPARENT SIMULATION RULES -->
-      <section class="rules-card" aria-labelledby="rulesTitle">
-        <div class="card-header">
-          <h3 id="rulesTitle" class="card-title" style="font-size: 1.15rem;">
-            📐 Transparent Simulation Rules
-          </h3>
-          <p class="card-desc">
-            Operational heuristics governing this desert irrigation simulation prototype:
-          </p>
+        <div class="page-footer-nav">
+          <button type="button" class="neu-btn btn-secondary" onclick="switchPage(1)">
+            &larr; Back to Setup
+          </button>
+          <button type="button" class="neu-btn btn-primary" onclick="switchPage(3)">
+            View Side-by-Side Comparison &rarr;
+          </button>
         </div>
-        <div class="rules-grid">
-          <div class="rule-box">
-            <strong>Target Moisture: 25%</strong>
-            <p>Soil at or above 25% is marked optimal. Allocates 0 L to prevent waterlogging and evaporative loss.</p>
+      </div>
+
+      <!-- ================= PAGE 3: SIDE-BY-SIDE COMPARISON ================= -->
+      <div id="page3" class="page-view">
+        <section class="neu-card" aria-labelledby="compSectionTitle">
+          <div class="card-header-bar">
+            <div>
+              <h2 id="compSectionTitle" class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
+                Usual vs. Recommended Schedule Comparison
+              </h2>
+              <p class="card-desc">Compare the traditional equal-split routine with the smart priority recommendation:</p>
+            </div>
           </div>
-          <div class="rule-box">
-            <strong>Critical Deficit (&lt; 20%)</strong>
-            <p>Requests up to 20 L. Placed at top priority to rescue dehydrated plant root systems.</p>
+
+          <div class="tank-dashboard-grid">
+            <!-- Animated Water Tank Card -->
+            <div class="water-tank-card">
+              <span class="comp-label">Storage Tank</span>
+              <div class="tank-vessel">
+                <div id="tankFluid" class="tank-water-fluid" style="height: 100%;"></div>
+              </div>
+              <div class="tank-stats">
+                <div style="font-weight: 800; color: #ffffff;" id="tankStatBudget">30 L Budget</div>
+                <div id="tankStatAllocated" style="color: var(--cyan-water); font-size: 0.78rem;">100% Allocated</div>
+              </div>
+            </div>
+
+            <!-- Comparison Cards List -->
+            <div>
+              <div id="comparisonCardsContainer" class="comp-cards-list">
+                <!-- Dynamically populated rows for Zone A, B, C -->
+              </div>
+
+              <!-- Summary Bar -->
+              <div class="summary-grid">
+                <div class="summary-stat-card">
+                  <span class="comp-label">Total Water Allocated</span>
+                  <div style="display: flex; gap: 20px; align-items: baseline; margin-top: 4px;">
+                    <div>
+                      <span style="font-size: 0.8rem; color: var(--text-dim);">Usual: </span>
+                      <span id="usualTotalAlloc" class="stat-num">30 L</span>
+                    </div>
+                    <div>
+                      <span style="font-size: 0.8rem; color: var(--accent);">Recommended: </span>
+                      <span id="recTotalAlloc" class="stat-num" style="color: var(--accent);">30 L</span>
+                    </div>
+                  </div>
+                  <span id="allocComparisonSummary" style="font-size: 0.8rem; color: var(--text-dim); margin-top: 2px;">
+                    All allocated water is actively used for crop deficit relief.
+                  </span>
+                </div>
+
+                <div class="summary-stat-card">
+                  <span class="comp-label">Water Left in Reserve</span>
+                  <div style="display: flex; gap: 20px; align-items: baseline; margin-top: 4px;">
+                    <div>
+                      <span style="font-size: 0.8rem; color: var(--text-dim);">Usual: </span>
+                      <span id="usualWaterLeft" class="stat-num">0 L</span>
+                    </div>
+                    <div>
+                      <span style="font-size: 0.8rem; color: var(--cyan-water);">Recommended: </span>
+                      <span id="recWaterLeft" class="stat-num" style="color: var(--cyan-water);">0 L</span>
+                    </div>
+                  </div>
+                  <span id="reserveSummary" style="font-size: 0.8rem; color: var(--text-dim); margin-top: 2px;">
+                    Entire water budget was allocated to active deficits.
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="rule-box">
-            <strong>Moderate Deficit (20% to &lt; 25%)</strong>
-            <p>Requests up to 10 L. Restores soil moisture to optimal buffer capacity.</p>
-          </div>
-          <div class="rule-box">
-            <strong>Offline / Blank Sensors</strong>
-            <p>Recommends 0 L and flags "Check this zone before watering" to avoid blind irrigation.</p>
-          </div>
-          <div class="rule-box">
-            <strong>Budget Allocation &amp; Tie-Breakers</strong>
-            <p>Allocates water to driest zones first. Ties break in A, B, C order. Shows partial doses if budget runs out.</p>
-          </div>
-          <div class="rule-box">
-            <strong>Usual Schedule Baseline</strong>
-            <p>Even division across all 3 zones with whole-litre remainders assigned to A, then B.</p>
-          </div>
+
+          <!-- Hidden table for accessibility & test assertion DOM queries -->
+          <table class="sr-only-table" aria-hidden="true">
+            <tbody id="comparisonTableBody"></tbody>
+          </table>
+        </section>
+
+        <div class="page-footer-nav">
+          <button type="button" class="neu-btn btn-secondary" onclick="switchPage(2)">
+            &larr; Back to Priority Plan
+          </button>
+          <button type="button" class="neu-btn btn-primary" onclick="switchPage(4)">
+            View Decision Rules &rarr;
+          </button>
         </div>
-      </section>
-    </div>
+      </div>
+
+      <!-- ================= PAGE 4: DECISION RULES & GUIDE ================= -->
+      <div id="page4" class="page-view">
+        <section class="neu-card" aria-labelledby="guideTitle">
+          <div class="card-header-bar">
+            <div>
+              <h2 id="guideTitle" class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                Simulated Decision Rules Reference
+              </h2>
+              <p class="card-desc">Clear, verifiable heuristics driving this hackathon simulation prototype:</p>
+            </div>
+          </div>
+
+          <div class="guide-grid">
+            <div class="guide-box">
+              <strong>🎯 25% Moisture Target</strong>
+              <p>Soil at or above 25% is marked optimal. 0 L is allocated to prevent overwatering, root rot, and evaporation.</p>
+            </div>
+            <div class="guide-box">
+              <strong>🚨 Critical Deficit (&lt; 20%)</strong>
+              <p>Requests simulated dose of up to 20 L. Prioritized 1st to preserve dehydrated root zones.</p>
+            </div>
+            <div class="guide-box">
+              <strong>⚠️ Moderate Deficit (20% to &lt; 25%)</strong>
+              <p>Requests simulated dose of up to 10 L. Brings soil back to safe buffer capacity.</p>
+            </div>
+            <div class="guide-box">
+              <strong>🔍 Missing / Offline Sensors</strong>
+              <p>Allocates 0 L and flags "Check this zone before watering" to prevent blind water application.</p>
+            </div>
+            <div class="guide-box">
+              <strong>🏆 Priority Sorting &amp; Tie-Breakers</strong>
+              <p>Allocates from driest to wettest. Ties broken in A, B, C order. Shows partial allocation if budget runs out.</p>
+            </div>
+            <div class="guide-box">
+              <strong>⚖️ Usual Schedule Baseline</strong>
+              <p>Even division across all 3 zones with whole-litre remainder distributed in A, B, C order.</p>
+            </div>
+          </div>
+        </section>
+
+        <div class="page-footer-nav">
+          <button type="button" class="neu-btn btn-secondary" onclick="switchPage(3)">
+            &larr; Back to Comparison
+          </button>
+          <button type="button" class="neu-btn btn-primary" onclick="switchPage(1)">
+            ↺ Start Over at Setup
+          </button>
+        </div>
+      </div>
+    </form>
 
     <!-- FOOTER -->
     <footer>
-      Desert Irrigation Planner &bull; Hackathon Prototype &bull; Pure Neumorphism Soft UI &bull; Works 100% Offline
+      Desert Irrigation Planner &bull; Breaking Bytes Hackathon Prototype &bull; Pure Dark Neumorphism &bull; Works 100% Offline
     </footer>
   </div>
 
   <script>
     /* -------------------------------------------------------------
-       DECISION ENGINE & NEUMORPHIC CONTROLLER
+       DECISION ENGINE & MULTI-PAGE CONTROLLER
        Pure JavaScript. Zero external requests.
     -------------------------------------------------------------- */
 
@@ -1068,6 +1410,32 @@
       moistureC: '15',
       waterBudget: '30'
     };
+
+    let currentPage = 1;
+
+    /**
+     * Smooth page switcher for multi-page dashboard.
+     */
+    function switchPage(pageNumber) {
+      currentPage = pageNumber;
+
+      // Update Tab Buttons
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById('tabBtn' + i);
+        const page = document.getElementById('page' + i);
+        if (i === pageNumber) {
+          btn.classList.add('active');
+          page.classList.add('active-page');
+        } else {
+          btn.classList.remove('active');
+          page.classList.remove('active-page');
+        }
+      }
+
+      // Re-run plan calculation to ensure views are fresh
+      handleMakePlan();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
     /**
      * Validates raw inputs from form fields.
@@ -1133,16 +1501,20 @@
         const fieldId = 'moisture' + z;
         const input = document.getElementById(fieldId);
         const errDiv = document.getElementById('errMoisture' + z);
-        const badge = document.getElementById('badge' + z);
-        const gauge = document.getElementById('gauge' + z);
+        const badge = document.getElementById('badgeA' ? 'badge' + z : null);
+        const gauge = document.getElementById('gaugeA' ? 'gauge' + z : null);
 
         if (errors[fieldId]) {
           input.classList.add('input-error');
           errDiv.textContent = errors[fieldId];
           errDiv.classList.add('visible');
-          badge.textContent = 'Invalid';
-          badge.className = 'zone-status-badge badge-crit';
-          gauge.style.width = '0%';
+          if (badge) {
+            badge.textContent = 'Invalid';
+            badge.className = 'zone-badge-pill badge-crit';
+          }
+          if (gauge) {
+            gauge.style.width = '0%';
+          }
         } else {
           input.classList.remove('input-error');
           errDiv.textContent = '';
@@ -1150,25 +1522,37 @@
 
           const mData = parsed.moisture[z];
           if (mData && mData.isBlank) {
-            badge.textContent = 'Sensor Missing';
-            badge.className = 'zone-status-badge badge-unk';
-            gauge.style.width = '0%';
-            gauge.className = 'gauge-fill';
+            if (badge) {
+              badge.textContent = 'Sensor Missing';
+              badge.className = 'zone-badge-pill badge-unk';
+            }
+            if (gauge) {
+              gauge.style.width = '0%';
+              gauge.className = 'gauge-fill';
+            }
           } else if (mData) {
             const val = mData.value;
-            gauge.style.width = Math.min(100, Math.max(0, val)) + '%';
+            if (gauge) {
+              gauge.style.width = Math.min(100, Math.max(0, val)) + '%';
+            }
             if (val >= TARGET_MOISTURE) {
-              badge.textContent = 'Optimal (≥25%)';
-              badge.className = 'zone-status-badge badge-opt';
-              gauge.className = 'gauge-fill fill-optimal';
+              if (badge) {
+                badge.textContent = 'Optimal (≥25%)';
+                badge.className = 'zone-badge-pill badge-opt';
+              }
+              if (gauge) gauge.className = 'gauge-fill fill-optimal';
             } else if (val < SEVERE_DEFICIT_THRESHOLD) {
-              badge.textContent = 'Critical (<20%)';
-              badge.className = 'zone-status-badge badge-crit';
-              gauge.className = 'gauge-fill fill-critical';
+              if (badge) {
+                badge.textContent = 'Critical (<20%)';
+                badge.className = 'zone-badge-pill badge-crit';
+              }
+              if (gauge) gauge.className = 'gauge-fill fill-critical';
             } else {
-              badge.textContent = 'Moderate (20–24%)';
-              badge.className = 'zone-status-badge badge-mod';
-              gauge.className = 'gauge-fill fill-moderate';
+              if (badge) {
+                badge.textContent = 'Moderate (20–24%)';
+                badge.className = 'zone-badge-pill badge-mod';
+              }
+              if (gauge) gauge.className = 'gauge-fill fill-moderate';
             }
           }
         }
@@ -1190,10 +1574,10 @@
       const resultsSection = document.getElementById('resultsSection');
       if (Object.keys(errors).length > 0) {
         withholdBanner.classList.add('visible');
-        resultsSection.style.display = 'none';
+        if (resultsSection) resultsSection.style.display = 'none';
       } else {
         withholdBanner.classList.remove('visible');
-        resultsSection.style.display = 'flex';
+        if (resultsSection) resultsSection.style.display = 'flex';
       }
     }
 
@@ -1431,10 +1815,10 @@
     }
 
     /**
-     * Renders all results using Neumorphic UI components.
+     * Renders all results into the DOM.
      */
     function renderPlan(moistureData, budget, usualPlan, recPlan) {
-      // 1. Hero Redirection Card
+      // 1. Redirection Card
       const redirection = deriveRedirectionMessage(moistureData, budget, usualPlan, recPlan);
       document.getElementById('redirectionMessage').textContent = redirection.headline;
       document.getElementById('redirectionSubMessage').textContent = redirection.subline;
@@ -1448,32 +1832,32 @@
         emptyDiv.className = 'seq-step-card';
         emptyDiv.style.gridColumn = '1 / -1';
         emptyDiv.innerHTML = `
-          <div class="step-zone-title" style="font-size: 1.1rem;">⏸️ No Irrigation Required Today</div>
-          <p class="step-reason-desc">All valid zones are currently at or above the 25% target moisture threshold, or sensors are unverified.</p>
+          <div class="seq-zone-title" style="font-size: 1.15rem;">⏸️ No Irrigation Required Today</div>
+          <p class="seq-reason-text">All valid zones are currently at or above the 25% target moisture threshold, or sensors are unverified.</p>
         `;
         seqContainer.appendChild(emptyDiv);
       } else {
         recPlan.waterOrder.forEach(step => {
           const card = document.createElement('div');
-          card.className = `seq-step-card ${step.allocated > 0 ? 'active-step' : ''}`;
+          card.className = `seq-step-card ${step.allocated > 0 ? 'active-priority' : ''}`;
 
           let amountHtml = '';
           if (step.allocated > 0 && !step.partial) {
-            amountHtml = `<div class="step-amount-tag">${step.allocated} L</div>`;
+            amountHtml = `<div class="seq-amount-box"><span class="seq-amount-num">${step.allocated} L</span><span style="font-size: 0.8rem; font-weight: 700; color: var(--accent);">Full Dose</span></div>`;
           } else if (step.partial) {
-            amountHtml = `<div class="step-amount-tag" style="color: var(--warning);">${step.allocated} L <span style="font-size: 0.8rem; font-weight: 700;">(Partial)</span></div>`;
+            amountHtml = `<div class="seq-amount-box"><span class="seq-amount-num partial">${step.allocated} L</span><span style="font-size: 0.8rem; font-weight: 700; color: var(--warning);">(Partial Dose)</span></div>`;
           } else {
-            amountHtml = `<div class="step-amount-tag zero">0 L <span style="font-size: 0.8rem; font-weight: 700;">(Budget Ran Out)</span></div>`;
+            amountHtml = `<div class="seq-amount-box"><span class="seq-amount-num zero">0 L</span><span style="font-size: 0.8rem; font-weight: 700; color: var(--danger);">(Budget Depleted)</span></div>`;
           }
 
           card.innerHTML = `
-            <div class="seq-step-header">
-              <span class="step-order-badge">${step.rank} Priority</span>
-              <span style="font-size: 0.85rem; font-weight: 800; color: var(--text-muted);">${step.moisture}% Moisture</span>
+            <div class="seq-header">
+              <span class="priority-pill">${step.rank} Priority</span>
+              <span style="font-size: 0.8rem; font-weight: 800; color: var(--text-dim);">${step.moisture}% Moisture</span>
             </div>
-            <div class="step-zone-title">Zone ${step.zone}</div>
+            <div class="seq-zone-title">Zone ${step.zone}</div>
             ${amountHtml}
-            <p class="step-reason-desc">${step.allocated > 0 ? (step.partial ? 'Budget exhausted before full 20 L dose could be delivered.' : 'Allocated full simulated requirement.') : 'Daily budget reached 0 L before reaching this zone.'}</p>
+            <p class="seq-reason-text">${step.allocated > 0 ? (step.partial ? 'Budget ran out before requested 20 L could be fully delivered.' : 'Allocated full simulated requirement.') : 'Daily budget reached 0 L before reaching this zone.'}</p>
           `;
           seqContainer.appendChild(card);
         });
@@ -1485,19 +1869,19 @@
           const card = document.createElement('div');
           card.className = 'seq-step-card';
           card.innerHTML = `
-            <div class="seq-step-header">
-              <span class="step-order-badge skip">Skipped</span>
-              <span style="font-size: 0.85rem; font-weight: 800; color: var(--text-muted);">${d.isBlank ? 'Sensor Missing' : d.moisture + '% Moisture'}</span>
+            <div class="seq-header">
+              <span class="priority-pill skip">Skipped</span>
+              <span style="font-size: 0.8rem; font-weight: 800; color: var(--text-dim);">${d.isBlank ? 'Sensor Missing' : d.moisture + '% Moisture'}</span>
             </div>
-            <div class="step-zone-title">Zone ${z}</div>
-            <div class="step-amount-tag zero">0 L</div>
-            <p class="step-reason-desc">${d.isBlank ? 'Safety hold: Check this zone before watering.' : 'Sufficient moisture (≥25% target). Water withheld.'}</p>
+            <div class="seq-zone-title">Zone ${z}</div>
+            <div class="seq-amount-box"><span class="seq-amount-num zero">0 L</span></div>
+            <p class="seq-reason-text">${d.isBlank ? 'Safety hold: Check this zone before watering.' : 'Sufficient moisture (≥25% target). Water withheld.'}</p>
           `;
           seqContainer.appendChild(card);
         });
       }
 
-      // 3. Side-by-Side Comparison List
+      // 3. Side-by-Side Comparison
       const compContainer = document.getElementById('comparisonCardsContainer');
       const tableBody = document.getElementById('comparisonTableBody');
       compContainer.innerHTML = '';
@@ -1509,54 +1893,52 @@
         const recAlloc = recPlan.alloc[zone];
         const diff = recAlloc - usualAlloc;
 
-        let diffPill = '';
+        let diffTag = '';
         if (diff > 0) {
-          diffPill = `<span class="comp-diff-pill gain">+${diff} L vs usual</span>`;
+          diffTag = `<span class="comp-diff-tag gain">+${diff} L vs usual</span>`;
         } else if (diff < 0) {
-          diffPill = `<span class="comp-diff-pill loss">${diff} L vs usual</span>`;
+          diffTag = `<span class="comp-diff-tag loss">${diff} L vs usual</span>`;
         } else {
-          diffPill = `<span class="comp-diff-pill" style="color: var(--text-muted);">Same as usual</span>`;
+          diffTag = `<span class="comp-diff-tag" style="color: var(--text-dim);">Same as usual</span>`;
         }
 
         const moistureLabel = rec.isBlank ? 'Blank (Missing)' : `${rec.moisture}%`;
 
-        // Neumorphic card row
         const row = document.createElement('div');
         row.className = 'comp-row-card';
         row.innerHTML = `
-          <div class="comp-cell-zone">
-            <span class="comp-cell-label">Greenhouse Zone</span>
-            <div class="comp-cell-val">Zone ${zone}</div>
-            <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">
+          <div>
+            <span class="comp-label">Greenhouse Zone</span>
+            <div class="comp-val">Zone ${zone}</div>
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-dim);">
               ${rec.isBlank ? '<span style="color: var(--danger);">⚠️ Missing</span>' : moistureLabel}
             </span>
           </div>
 
           <div>
-            <span class="comp-cell-label">Usual Plan</span>
-            <div class="comp-cell-val">${usualAlloc} L</div>
-            <span style="font-size: 0.75rem; color: var(--text-muted);">Equal-split</span>
+            <span class="comp-label">Usual Plan</span>
+            <div class="comp-val">${usualAlloc} L</div>
+            <span style="font-size: 0.75rem; color: var(--text-dim);">Equal-split</span>
           </div>
 
           <div>
-            <span class="comp-cell-label">Recommended</span>
-            <div class="comp-cell-val rec-val">${recAlloc} L</div>
-            ${diffPill}
+            <span class="comp-label">Recommended</span>
+            <div class="comp-val rec-val">${recAlloc} L</div>
+            ${diffTag}
           </div>
 
           <div>
-            <span class="comp-cell-label">Decision Reason</span>
-            <div style="font-size: 0.9rem; font-weight: 700; color: var(--text); margin-top: 2px;">
+            <span class="comp-label">Decision Reason</span>
+            <div style="font-size: 0.88rem; font-weight: 700; color: #ffffff; margin-top: 2px;">
               ${rec.finalReason}
             </div>
-            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+            <div style="font-size: 0.78rem; color: var(--text-dim); margin-top: 2px;">
               ${usualPlan.reasons[zone]}
             </div>
           </div>
         `;
         compContainer.appendChild(row);
 
-        // Keep invisible table updated for test runner DOM queries
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>Zone ${zone}</td>
@@ -1579,6 +1961,23 @@
         document.getElementById('reserveSummary').textContent = `${recPlan.waterLeft} L left unallocated in tank (deficit demand fully met or unverified sensors held back).`;
       } else {
         document.getElementById('reserveSummary').textContent = 'Entire water budget was allocated to active deficits.';
+      }
+
+      // Update Animated Tank Visual
+      const tankFluid = document.getElementById('tankFluid');
+      const tankStatBudget = document.getElementById('tankStatBudget');
+      const tankStatAllocated = document.getElementById('tankStatAllocated');
+
+      if (tankFluid && tankStatBudget && tankStatAllocated) {
+        tankStatBudget.textContent = `${budget} L Budget`;
+        if (budget > 0) {
+          const pct = Math.round((recPlan.totalAllocated / budget) * 100);
+          tankFluid.style.height = `${pct}%`;
+          tankStatAllocated.textContent = `${pct}% Allocated (${recPlan.waterLeft} L in tank)`;
+        } else {
+          tankFluid.style.height = `0%`;
+          tankStatAllocated.textContent = `0 L Available`;
+        }
       }
     }
 
