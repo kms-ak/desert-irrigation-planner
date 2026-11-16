@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desert Irrigation Planner - Smart Desert Farming Prototype</title>
+  <style>
+    /* -------------------------------------------------------------
+       HIGH-CONTRAST OUTDOOR-FIRST STYLING (Zero External Dependencies)
+       Designed for direct sunlight, high glare, and mobile greenhouse use.
+       All status indicators use clear text labels in addition to contrast cues.
+    -------------------------------------------------------------- */
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --text-muted: #334155;
+      --border: #0f172a;
+      --border-light: #94a3b8;
+      --border-width: 2px;
+      --radius: 8px;
+
+      /* High-contrast status badges (readable without color vision) */
+      --color-pri: #0f172a;
+      --color-pri-inv: #ffffff;
+      --color-accent: #047857;
+      --color-accent-bg: #ecfdf5;
+      --color-accent-border: #065f46;
+      --color-warning-bg: #fef3c7;
+      --color-warning-text: #78350f;
+      --color-warning-border: #b45309;
+      --color-danger-bg: #fee2e2;
+      --color-danger-text: #991b1b;
+      --color-danger-border: #b91c1c;
+      --color-info-bg: #e0f2fe;
+      --color-info-text: #075985;
+      --color-info-border: #0284c7;
+
+      --focus-ring: #2563eb;
+    }
+
+    /* High contrast mode for extreme outdoor glare */
+    body.glare-mode {
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --text: #000000;
+      --text-muted: #111111;
+      --border: #000000;
+      --border-light: #000000;
+      --border-width: 3px;
+      --color-accent-bg: #ffffff;
+      --color-accent: #000000;
+      --color-accent-border: #000000;
+      --color-warning-bg: #ffffff;
+      --color-warning-text: #000000;
+      --color-warning-border: #000000;
+      --color-danger-bg: #ffffff;
+      --color-danger-text: #000000;
+      --color-danger-border: #000000;
+      --color-info-bg: #ffffff;
+      --color-info-text: #000000;
+      --color-info-border: #000000;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 16px;
+      font-size: 16px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    header {
+      background-color: var(--surface);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 2px 0 var(--border);
+    }
+
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .badge-track {
+      display: inline-block;
+      background: var(--color-pri);
+      color: var(--color-pri-inv);
+      padding: 4px 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .tagline {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .simulation-badge {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background-color: var(--color-info-bg);
+      border: 2px solid var(--color-info-border);
+      color: var(--color-info-text);
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .btn-toggle-glare {
+      background: var(--surface);
+      color: var(--text);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-toggle-glare:hover {
+      background: var(--text);
+      color: var(--surface);
+    }
+
+    /* CARD PANELS */
+    .panel {
+      background-color: var(--surface);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 2px 0 var(--border);
+    }
+
+    .panel-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+    }
+
+    /* INPUTS & FORM */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .form-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .zone-card {
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      background: #fafafa;
+    }
+
+    body.glare-mode .zone-card {
+      background: #ffffff;
+      border-width: 3px;
+    }
+
+    label {
+      font-weight: 700;
+      font-size: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .input-hint {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    input[type="number"], input[type="text"] {
+      width: 100%;
+      height: 48px;
+      padding: 8px 36px 8px 12px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      appearance: textfield;
+      -moz-appearance: textfield;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--focus-ring);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+    }
+
+    input.input-error {
+      border-color: var(--color-danger-border);
+      background-color: var(--color-danger-bg);
+      color: var(--color-danger-text);
+    }
+
+    .input-suffix {
+      position: absolute;
+      right: 12px;
+      font-weight: 800;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .field-error-msg {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--color-danger-text);
+      margin-top: 4px;
+      display: none;
+    }
+
+    .field-error-msg.visible {
+      display: block;
+    }
+
+    .budget-section {
+      margin-top: 16px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: #fafafa;
+    }
+    body.glare-mode .budget-section {
+      background: #ffffff;
+      border-width: 3px;
+    }
+
+    .budget-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+
+    @media (min-width: 640px) {
+      .budget-grid {
+        grid-template-columns: 240px 1fr;
+      }
+    }
+
+    /* ACTION BUTTONS */
+    .actions-bar {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    button.btn {
+      min-height: 48px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      font-weight: 800;
+      border-radius: var(--radius);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 2px solid var(--border);
+      transition: background 0.1s, transform 0.05s;
+    }
+
+    button.btn:active {
+      transform: translateY(1px);
+    }
+
+    button.btn-primary {
+      background: var(--color-pri);
+      color: var(--color-pri-inv);
+    }
+    button.btn-primary:hover {
+      background: #1e293b;
+    }
+
+    button.btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+    }
+    button.btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    /* PRESETS FOR TESTING / JUDGES */
+    .presets-container {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--border-light);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .presets-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .btn-preset {
+      min-height: 36px;
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      background: #f1f5f9;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-preset:hover {
+      background: #0f172a;
+      color: #ffffff;
+    }
+
+    /* ERROR WITHHOLD BANNER */
+    .withhold-banner {
+      display: none;
+      padding: 16px;
+      background: var(--color-danger-bg);
+      border: 2px solid var(--color-danger-border);
+      color: var(--color-danger-text);
+      border-radius: var(--radius);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .withhold-banner.visible {
+      display: block;
+    }
+
+    /* REDIRECTION HIGHLIGHT CALLOUT */
+    .redirection-card {
+      background: var(--color-accent-bg);
+      border: 2px solid var(--color-accent-border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+    }
+    body.glare-mode .redirection-card {
+      border-width: 3px;
+    }
+
+    .redirection-badge {
+      display: inline-block;
+      font-weight: 800;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+      padding: 2px 8px;
+      background: var(--color-accent-border);
+      color: #ffffff;
+      border-radius: 4px;
+    }
+
+    .redirection-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .redirection-sub {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* RECOMMENDED WATERING ORDER SEQUENCE */
+    .sequence-container {
+      background: #ffffff;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+    }
+    body.glare-mode .sequence-container {
+      border-width: 3px;
+    }
+
+    .sequence-steps {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .step-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      font-weight: 700;
+      background: #f8fafc;
+    }
+
+    .step-pill.active {
+      background: var(--color-pri);
+      color: var(--color-pri-inv);
+    }
+
+    .step-arrow {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    /* SIDE-BY-SIDE COMPARISON TABLE */
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-top: 14px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    table.comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      min-width: 620px;
+      background: var(--surface);
+    }
+
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 0.95rem;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f1f5f9;
+      color: var(--text);
+      font-weight: 800;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 2px solid var(--border);
+    }
+
+    body.glare-mode th {
+      background: #e2e8f0;
+      border-bottom-width: 3px;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .col-zone {
+      width: 12%;
+      font-weight: 800;
+    }
+    .col-moist {
+      width: 18%;
+    }
+    .col-usual {
+      width: 16%;
+      background: #fdfdfd;
+    }
+    .col-rec {
+      width: 20%;
+      background: #f0fdf4;
+      font-weight: 700;
+    }
+    body.glare-mode .col-rec {
+      background: #ffffff;
+    }
+    .col-reason {
+      width: 34%;
+    }
+
+    /* SUMMARY TOTALS ROW */
+    tr.summary-row td {
+      background: #f8fafc;
+      font-weight: 800;
+      border-top: 2px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr.leftover-row td {
+      background: #ffffff;
+      font-weight: 800;
+      border-bottom: none;
+    }
+
+    /* BADGES */
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      border: 1px solid currentColor;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+
+    .badge-critical {
+      background: var(--color-danger-bg);
+      color: var(--color-danger-text);
+      border-color: var(--color-danger-border);
+    }
+
+    .badge-moderate {
+      background: var(--color-warning-bg);
+      color: var(--color-warning-text);
+      border-color: var(--color-warning-border);
+    }
+
+    .badge-optimal {
+      background: #f1f5f9;
+      color: #334155;
+      border-color: #64748b;
+    }
+
+    .badge-missing {
+      background: #fee2e2;
+      color: #991b1b;
+      border-color: #b91c1c;
+    }
+
+    .badge-order {
+      background: var(--color-pri);
+      color: var(--color-pri-inv);
+      padding: 2px 6px;
+      font-size: 0.75rem;
+      margin-right: 4px;
+      border-radius: 3px;
+    }
+
+    /* DECISION RULES REFERENCE BOX */
+    .rules-card {
+      background: #f8fafc;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      font-size: 0.92rem;
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    @media (min-width: 640px) {
+      .rules-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .rule-item {
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    .rule-item strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--text);
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      padding: 16px 0 24px;
+    }
+
+    /* Print styling */
+    @media print {
+      body {
+        background: #ffffff;
+        color: #000000;
+        padding: 0;
+      }
+      .actions-bar, .presets-container, .btn-toggle-glare {
+        display: none !important;
+      }
+      .panel, header, .redirection-card, .sequence-container, .rules-card {
+        box-shadow: none;
+        border-color: #000000;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- HEADER -->
+    <header>
+      <div class="header-top">
+        <div>
+          <span class="badge-track">Breaking Bytes Hackathon &bull; Smart Farming for the Desert</span>
+          <h1 style="margin-top: 6px;">Desert Irrigation Planner</h1>
+        </div>
+        <button id="btnGlare" class="btn-toggle-glare" type="button" aria-pressed="false" onclick="toggleGlareMode()">
+          &#9728;&#65039; High-Sun Glare Mode
+        </button>
+      </div>
+      <p class="tagline">
+        Smart prioritization for small desert greenhouse irrigation under limited daily water supplies.
+      </p>
+      <div class="simulation-badge">
+        <strong>Simulation Notice:</strong> 25% soil moisture target and dose rules (20 L for &lt;20%, 10 L for 20% to &lt;25%, 0 L for &ge;25%) are simulated operational heuristics designed to demonstrate constrained resource redirection.
+      </div>
+    </header>
+
+    <!-- INPUTS PANEL -->
+    <section class="panel" aria-labelledby="inputsHeading">
+      <h2 id="inputsHeading" class="panel-title">1. Starting Conditions &amp; Today's Budget</h2>
+      <p class="panel-desc">
+        Enter the moisture sensor percentage for each greenhouse zone (0% to 100%). Leave blank if sensor data is missing. Specify today's available water budget in whole litres.
+      </p>
+
+      <form id="irrigationForm" onsubmit="event.preventDefault(); handleMakePlan();" novalidate>
+        <!-- ZONES GRID -->
+        <div class="form-grid">
+          <!-- Zone A -->
+          <div class="zone-card">
+            <div class="field-group">
+              <label for="moistureA">
+                <span>Zone A Moisture</span>
+                <span class="input-hint">0–100% or blank</span>
+              </label>
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  id="moistureA"
+                  name="moistureA"
+                  min="0"
+                  max="100"
+                  step="any"
+                  placeholder="e.g. 32"
+                  value="32"
+                  aria-describedby="errMoistureA hintMoistureA"
+                  oninput="handleLiveInput()"
+                >
+                <span class="input-suffix">%</span>
+              </div>
+              <div id="hintMoistureA" class="input-hint" style="margin-top: 2px;">Default: 32% (Above target)</div>
+              <div id="errMoistureA" class="field-error-msg" role="alert"></div>
+            </div>
+          </div>
+
+          <!-- Zone B -->
+          <div class="zone-card">
+            <div class="field-group">
+              <label for="moistureB">
+                <span>Zone B Moisture</span>
+                <span class="input-hint">0–100% or blank</span>
+              </label>
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  id="moistureB"
+                  name="moistureB"
+                  min="0"
+                  max="100"
+                  step="any"
+                  placeholder="e.g. 22"
+                  value="22"
+                  aria-describedby="errMoistureB hintMoistureB"
+                  oninput="handleLiveInput()"
+                >
+                <span class="input-suffix">%</span>
+              </div>
+              <div id="hintMoistureB" class="input-hint" style="margin-top: 2px;">Default: 22% (Moderate deficit)</div>
+              <div id="errMoistureB" class="field-error-msg" role="alert"></div>
+            </div>
+          </div>
+
+          <!-- Zone C -->
+          <div class="zone-card">
+            <div class="field-group">
+              <label for="moistureC">
+                <span>Zone C Moisture</span>
+                <span class="input-hint">0–100% or blank</span>
+              </label>
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  id="moistureC"
+                  name="moistureC"
+                  min="0"
+                  max="100"
+                  step="any"
+                  placeholder="e.g. 15"
+                  value="15"
+                  aria-describedby="errMoistureC hintMoistureC"
+                  oninput="handleLiveInput()"
+                >
+                <span class="input-suffix">%</span>
+              </div>
+              <div id="hintMoistureC" class="input-hint" style="margin-top: 2px;">Default: 15% (Critical deficit)</div>
+              <div id="errMoistureC" class="field-error-msg" role="alert"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WATER BUDGET -->
+        <div class="budget-section">
+          <div class="budget-grid">
+            <div class="field-group">
+              <label for="waterBudget">
+                <span>Daily Water Budget</span>
+                <span class="input-hint">Whole Litres</span>
+              </label>
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  id="waterBudget"
+                  name="waterBudget"
+                  min="0"
+                  step="1"
+                  placeholder="e.g. 30"
+                  value="30"
+                  aria-describedby="errBudget hintBudget"
+                  oninput="handleLiveInput()"
+                >
+                <span class="input-suffix">L</span>
+              </div>
+              <div id="hintBudget" class="input-hint" style="margin-top: 2px;">Non-negative integer (e.g. 30)</div>
+              <div id="errBudget" class="field-error-msg" role="alert"></div>
+            </div>
+            <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">
+              <strong>Budget Allocation Note:</strong> The usual schedule divides this budget equally into 3 shares (giving any 1-litre remainders in A, B, C order). The recommended planner allocates water dynamically strictly where soil moisture is below the 25% target.
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="actions-bar">
+          <button type="submit" class="btn btn-primary" id="btnMakePlan">
+            Make Watering Plan
+          </button>
+          <button type="button" class="btn btn-secondary" id="btnLoadDemo" onclick="loadDemoValues()">
+            Load Demo Example
+          </button>
+        </div>
+
+        <!-- PRESET BUTTONS FOR JUDGES -->
+        <div class="presets-container" aria-label="Quick Verification Scenarios">
+          <span class="presets-label">Judge Quick Test Scenarios:</span>
+          <button type="button" class="btn-preset" onclick="loadScenario('default')">Default (30 L)</button>
+          <button type="button" class="btn-preset" onclick="loadScenario('missingC')">Missing Sensor C</button>
+          <button type="button" class="btn-preset" onclick="loadScenario('budget15')">15 L Budget (Low)</button>
+          <button type="button" class="btn-preset" onclick="loadScenario('budget0')">0 L Budget</button>
+          <button type="button" class="btn-preset" onclick="loadScenario('aboveTarget')">All Above Target</button>
+          <button type="button" class="btn-preset" onclick="loadScenario('equalReadings')">Equal Deficits (18% each)</button>
+          <button type="button" class="btn-preset" onclick="loadScenario('zeroMoisture')">0% Moisture on Zone C</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ERROR WITHHOLD BANNER -->
+    <div id="withholdBanner" class="withhold-banner" role="alert">
+      <strong>Planning Paused:</strong> Please fix the invalid inputs marked above. A watering plan cannot be generated until all provided readings and the water budget are valid.
+    </div>
+
+    <!-- RESULTS SECTION -->
+    <div id="resultsSection" style="display: flex; flex-direction: column; gap: 20px;">
+
+      <!-- REDIRECTION HIGHLIGHT CARD -->
+      <section class="redirection-card" aria-labelledby="redirectionHeading">
+        <span class="redirection-badge">Budget Efficiency Analysis</span>
+        <h2 id="redirectionHeading" class="redirection-title">Redirection Summary</h2>
+        <p id="redirectionMessage" style="font-size: 1.15rem; font-weight: 800; color: var(--text); margin-top: 4px;">
+          <!-- Dynamically populated -->
+        </p>
+        <p id="redirectionSubMessage" class="redirection-sub" style="margin-top: 6px;">
+          <!-- Dynamically populated -->
+        </p>
+      </section>
+
+      <!-- WATERING SEQUENCE & PRIORITY -->
+      <section class="sequence-container" aria-labelledby="sequenceHeading">
+        <h2 id="sequenceHeading" class="panel-title" style="margin-bottom: 4px;">2. Recommended Watering Priority Order</h2>
+        <p class="panel-desc" style="margin-bottom: 8px;">
+          Valves should be opened in this sequence to protect the most vulnerable plants first before the daily budget is exhausted:
+        </p>
+        <div id="wateringSequence" class="sequence-steps" aria-live="polite">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- COMPARISON TABLE PANEL -->
+      <section class="panel" aria-labelledby="tableHeading">
+        <h2 id="tableHeading" class="panel-title">3. Side-by-Side Schedule Comparison</h2>
+        <p class="panel-desc">
+          Compare the standard equal-split routine with the simulated priority recommendation using identical starting conditions and budget.
+        </p>
+
+        <div class="table-wrapper">
+          <table class="comparison-table" aria-label="Irrigation Schedule Comparison Table">
+            <thead>
+              <tr>
+                <th scope="col" class="col-zone">Zone</th>
+                <th scope="col" class="col-moist">Soil Moisture</th>
+                <th scope="col" class="col-usual">Usual Plan</th>
+                <th scope="col" class="col-rec">Recommended</th>
+                <th scope="col" class="col-reason">Recommendation Details &amp; Reason</th>
+              </tr>
+            </thead>
+            <tbody id="comparisonTableBody">
+              <!-- Dynamically populated rows for A, B, C -->
+            </tbody>
+            <tfoot>
+              <tr class="summary-row">
+                <td colspan="2"><strong>Total Water Allocated:</strong></td>
+                <td id="usualTotalAlloc" class="col-usual"><strong>30 L</strong></td>
+                <td id="recTotalAlloc" class="col-rec"><strong>30 L</strong></td>
+                <td id="allocComparisonSummary">Recommended matches available demand.</td>
+              </tr>
+              <tr class="leftover-row">
+                <td colspan="2"><strong>Water Left in Reserve:</strong></td>
+                <td id="usualWaterLeft" class="col-usual"><strong>0 L</strong></td>
+                <td id="recWaterLeft" class="col-rec"><strong>0 L</strong></td>
+                <td id="reserveSummary">Unused water is preserved in the storage tank.</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
+
+      <!-- DECISION RULES CARD (TRANSPARENT SIMULATION DOCS) -->
+      <section class="rules-card" aria-labelledby="rulesHeading">
+        <h3 id="rulesHeading" style="font-size: 1.05rem; font-weight: 800; color: var(--text);">
+          Simulated Decision Logic Reference
+        </h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">
+          These heuristics simulate decision-support logic for small desert greenhouse systems:
+        </p>
+        <div class="rules-grid">
+          <div class="rule-item">
+            <strong>Target Moisture: 25%</strong>
+            Zones &ge; 25% are marked optimal and receive 0 L to prevent unnecessary watering.
+          </div>
+          <div class="rule-item">
+            <strong>Dose Tier 1: Severe Deficit (&lt; 20%)</strong>
+            Requests simulated dose of up to 20 L. Prioritized first for immediate root relief.
+          </div>
+          <div class="rule-item">
+            <strong>Dose Tier 2: Moderate Deficit (20% to &lt; 25%)</strong>
+            Requests simulated dose of up to 10 L to bring soil up to target buffer.
+          </div>
+          <div class="rule-item">
+            <strong>Blank / Missing Sensors</strong>
+            Allocates 0 L and flags "Check this zone before watering" to avoid blind irrigation.
+          </div>
+          <div class="rule-item">
+            <strong>Priority Allocation &amp; Tie-Breaker</strong>
+            Driest zone receives water first. Ties break in A, B, C order. Water is capped by remaining budget.
+          </div>
+          <div class="rule-item">
+            <strong>Usual Schedule Benchmark</strong>
+            Even division across all 3 zones (<code>Math.floor(budget / 3)</code> with remainders to A, then B).
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      Desert Irrigation Planner &bull; Hackathon Prototype &bull; Zero External Dependencies &bull; Works 100% Offline
+    </footer>
+  </div>
+
+  <script>
+    /* -------------------------------------------------------------
+       DECISION RULES & SIMULATION ENGINE
+       All execution is pure local JavaScript. No network calls.
+    -------------------------------------------------------------- */
+
+    const TARGET_MOISTURE = 25; // Target %
+    const SEVERE_DEFICIT_THRESHOLD = 20; // Severe deficit cutoff %
+
+    // Default Demo Scenario Values
+    const DEMO_VALUES = {
+      moistureA: '32',
+      moistureB: '22',
+      moistureC: '15',
+      waterBudget: '30'
+    };
+
+    /**
+     * Toggles High-Sun Glare Mode for outdoor readability.
+     */
+    function toggleGlareMode() {
+      const body = document.body;
+      const btn = document.getElementById('btnGlare');
+      const isGlare = body.classList.toggle('glare-mode');
+      btn.setAttribute('aria-pressed', isGlare ? 'true' : 'false');
+      btn.innerHTML = isGlare ? '&#9680; Standard Contrast' : '&#9728;&#65039; High-Sun Glare Mode';
+    }
+
+    /**
+     * Validates raw inputs from form fields.
+     */
+    function validateInputs() {
+      const errors = {};
+      const parsed = {
+        moisture: {},
+        budget: null
+      };
+
+      // Helper to validate moisture reading
+      function checkMoisture(zoneId, fieldName) {
+        const inputElem = document.getElementById(zoneId);
+        const raw = inputElem.value;
+        const trimmed = raw !== null && raw !== undefined ? String(raw).trim() : '';
+
+        if (trimmed === '') {
+          // Blank is valid: missing sensor
+          parsed.moisture[zoneId.replace('moisture', '')] = { isBlank: true, value: null };
+          return;
+        }
+
+        const num = Number(trimmed);
+        if (isNaN(num) || num < 0 || num > 100) {
+          errors[zoneId] = 'Must be a valid reading between 0% and 100%, or blank.';
+        } else {
+          parsed.moisture[zoneId.replace('moisture', '')] = { isBlank: false, value: num };
+        }
+      }
+
+      checkMoisture('moistureA', 'Zone A');
+      checkMoisture('moistureB', 'Zone B');
+      checkMoisture('moistureC', 'Zone C');
+
+      // Helper to validate water budget
+      const budgetElem = document.getElementById('waterBudget');
+      const rawBudget = budgetElem.value;
+      const trimmedBudget = rawBudget !== null && rawBudget !== undefined ? String(rawBudget).trim() : '';
+
+      if (trimmedBudget === '') {
+        errors['waterBudget'] = 'Enter water budget in whole litres (0 or more).';
+      } else {
+        const numBudget = Number(trimmedBudget);
+        if (isNaN(numBudget) || !Number.isInteger(numBudget) || numBudget < 0) {
+          errors['waterBudget'] = 'Budget must be a non-negative whole number (e.g. 0, 15, 30).';
+        } else {
+          parsed.budget = numBudget;
+        }
+      }
+
+      return {
+        isValid: Object.keys(errors).length === 0,
+        errors,
+        parsed
+      };
+    }
+
+    /**
+     * Renders validation error messages to UI.
+     */
+    function renderFieldErrors(errors) {
+      const fields = ['moistureA', 'moistureB', 'moistureC', 'waterBudget'];
+      const errorMap = {
+        moistureA: 'errMoistureA',
+        moistureB: 'errMoistureB',
+        moistureC: 'errMoistureC',
+        waterBudget: 'errBudget'
+      };
+
+      fields.forEach(fieldId => {
+        const input = document.getElementById(fieldId);
+        const errDiv = document.getElementById(errorMap[fieldId]);
+        if (errors[fieldId]) {
+          input.classList.add('input-error');
+          errDiv.textContent = errors[fieldId];
+          errDiv.classList.add('visible');
+        } else {
+          input.classList.remove('input-error');
+          errDiv.textContent = '';
+          errDiv.classList.remove('visible');
+        }
+      });
+
+      const withholdBanner = document.getElementById('withholdBanner');
+      const resultsSection = document.getElementById('resultsSection');
+
+      if (Object.keys(errors).length > 0) {
+        withholdBanner.classList.add('visible');
+        resultsSection.style.display = 'none';
+      } else {
+        withholdBanner.classList.remove('visible');
+        resultsSection.style.display = 'flex';
+      }
+    }
+
+    /**
+     * Computes the traditional Equal-Split Routine for whole litres.
+     */
+    function computeUsualPlan(budget) {
+      const base = Math.floor(budget / 3);
+      const remainder = budget % 3;
+
+      const alloc = {
+        A: base + (remainder >= 1 ? 1 : 0),
+        B: base + (remainder >= 2 ? 1 : 0),
+        C: base
+      };
+
+      const reasons = {
+        A: `Equal-split share of ${budget} L budget (${base} L base${remainder >= 1 ? ' + 1 L remainder' : ''})`,
+        B: `Equal-split share of ${budget} L budget (${base} L base${remainder >= 2 ? ' + 1 L remainder' : ''})`,
+        C: `Equal-split share of ${budget} L budget (${base} L base)`
+      };
+
+      const totalAllocated = alloc.A + alloc.B + alloc.C;
+      const waterLeft = budget - totalAllocated;
+
+      return { alloc, reasons, totalAllocated, waterLeft };
+    }
+
+    /**
+     * Computes the Recommended Plan using simulated heuristics.
+     */
+    function computeRecommendedPlan(moistureData, budget) {
+      const zones = ['A', 'B', 'C'];
+      const details = {};
+
+      zones.forEach(z => {
+        const reading = moistureData[z];
+        if (reading.isBlank) {
+          details[z] = {
+            zone: z,
+            isBlank: true,
+            moisture: null,
+            requested: 0,
+            eligible: false,
+            badgeClass: 'badge-missing',
+            badgeText: 'MISSING SENSOR',
+            moistureDisplay: 'Blank (Missing)',
+            reason: 'Check this zone before watering.'
+          };
+        } else {
+          const m = reading.value;
+          if (m >= TARGET_MOISTURE) {
+            details[z] = {
+              zone: z,
+              isBlank: false,
+              moisture: m,
+              requested: 0,
+              eligible: false,
+              badgeClass: 'badge-optimal',
+              badgeText: 'AT/ABOVE TARGET',
+              moistureDisplay: `${m}% (Target: 25%)`,
+              reason: `Moisture (${m}%) is at or above simulated target (25%). No watering needed.`
+            };
+          } else if (m < SEVERE_DEFICIT_THRESHOLD) {
+            details[z] = {
+              zone: z,
+              isBlank: false,
+              moisture: m,
+              requested: 20,
+              eligible: true,
+              badgeClass: 'badge-critical',
+              badgeText: 'CRITICAL DEFICIT',
+              moistureDisplay: `${m}% (&lt; 20%)`,
+              reason: `Moisture (${m}%) is below 20%. Requests simulated dose of up to 20 L.`
+            };
+          } else {
+            // 20% to < 25%
+            details[z] = {
+              zone: z,
+              isBlank: false,
+              moisture: m,
+              requested: 10,
+              eligible: true,
+              badgeClass: 'badge-moderate',
+              badgeText: 'MODERATE DEFICIT',
+              moistureDisplay: `${m}% (20–24%)`,
+              reason: `Moisture (${m}%) is in buffer zone (20% to <25%). Requests simulated dose of up to 10 L.`
+            };
+          }
+        }
+      });
+
+      // Sort eligible zones by lowest moisture first, break ties in A, B, C order
+      const eligibleZones = zones
+        .filter(z => details[z].eligible)
+        .sort((z1, z2) => {
+          if (details[z1].moisture !== details[z2].moisture) {
+            return details[z1].moisture - details[z2].moisture;
+          }
+          return z1.localeCompare(z2);
+        });
+
+      let remaining = budget;
+      const alloc = { A: 0, B: 0, C: 0 };
+      const waterOrder = []; // ordered items for sequence
+      const executionNotes = {};
+
+      eligibleZones.forEach((z, idx) => {
+        const req = details[z].requested;
+        const given = Math.min(req, remaining);
+        alloc[z] = given;
+        remaining -= given;
+
+        const rankSuffix = ['1st', '2nd', '3rd'][idx] || `${idx + 1}th`;
+
+        if (given === req && given > 0) {
+          executionNotes[z] = `Watered ${rankSuffix}: Allocated full requested simulated dose of ${given} L.`;
+          waterOrder.push({
+            zone: z,
+            rank: rankSuffix,
+            allocated: given,
+            requested: req,
+            partial: false,
+            moisture: details[z].moisture
+          });
+        } else if (given > 0 && given < req) {
+          executionNotes[z] = `Watered ${rankSuffix}: Allocated partial dose of ${given} L (requested ${req} L, but budget ran out).`;
+          waterOrder.push({
+            zone: z,
+            rank: rankSuffix,
+            allocated: given,
+            requested: req,
+            partial: true,
+            moisture: details[z].moisture
+          });
+        } else {
+          // given === 0
+          executionNotes[z] = `Budget exhausted: Requested ${req} L, but 0 L remained in today's budget.`;
+          waterOrder.push({
+            zone: z,
+            rank: rankSuffix,
+            allocated: 0,
+            requested: req,
+            exhausted: true,
+            moisture: details[z].moisture
+          });
+        }
+      });
+
+      // Assign final detailed reasons
+      zones.forEach(z => {
+        if (details[z].isBlank) {
+          details[z].finalReason = 'Check this zone before watering.';
+        } else if (details[z].eligible) {
+          details[z].finalReason = executionNotes[z] || details[z].reason;
+        } else {
+          details[z].finalReason = details[z].reason;
+        }
+        details[z].allocated = alloc[z];
+      });
+
+      const totalAllocated = alloc.A + alloc.B + alloc.C;
+      const waterLeft = remaining;
+
+      return {
+        alloc,
+        details,
+        waterOrder,
+        eligibleZones,
+        totalAllocated,
+        waterLeft
+      };
+    }
+
+    /**
+     * Derives high-contrast, mathematically factual redirection analysis.
+     * Guaranteed to match "10 L redirected from an already-moist zone to the driest zone." in default case.
+     */
+    function deriveRedirectionMessage(moistureData, budget, usualPlan, recPlan) {
+      const zones = ['A', 'B', 'C'];
+
+      // Known zones at or above target
+      const moistZones = zones.filter(z => !moistureData[z].isBlank && moistureData[z].value >= TARGET_MOISTURE);
+      const moistWaterUsual = moistZones.reduce((sum, z) => sum + usualPlan.alloc[z], 0);
+
+      // Deficit zones that gained water in recommended vs usual
+      const gains = [];
+      zones.forEach(z => {
+        const diff = recPlan.alloc[z] - usualPlan.alloc[z];
+        if (diff > 0) {
+          gains.push({
+            zone: z,
+            gain: diff,
+            moisture: moistureData[z].value,
+            isBlank: moistureData[z].isBlank
+          });
+        }
+      });
+
+      // Find the driest valid zone
+      let minMoist = Infinity;
+      let driestZone = null;
+      zones.forEach(z => {
+        if (!moistureData[z].isBlank && moistureData[z].value < minMoist) {
+          minMoist = moistureData[z].value;
+          driestZone = z;
+        }
+      });
+
+      let headline = '';
+      let subline = '';
+
+      if (budget === 0) {
+        headline = '0 L Water Budget Available';
+        subline = 'Both schedules allocate 0 L. No water can be applied or redirected.';
+        return { headline, subline };
+      }
+
+      // Check default case: 1 moist zone (A=32%), C is driest (15%), gain is exactly moistWaterUsual (10 L)
+      if (moistZones.length === 1 && moistWaterUsual > 0 && gains.length === 1 && gains[0].zone === driestZone && gains[0].gain === moistWaterUsual) {
+        headline = `${moistWaterUsual} L redirected from an already-moist zone to the driest zone.`;
+        subline = `Zone ${moistZones[0]} is at ${moistureData[moistZones[0]].value}% (&ge;25% target). Its usual ${usualPlan.alloc[moistZones[0]]} L allocation was redirected entirely to Zone ${driestZone} (${minMoist}% moisture), ensuring water is delivered where soil deficit is most severe.`;
+        return { headline, subline };
+      }
+
+      if (moistWaterUsual > 0) {
+        const moistList = moistZones.map(z => `Zone ${z} (${moistureData[z].value}%)`).join(', ');
+
+        if (gains.length === 1) {
+          const g = gains[0];
+          const isDriest = (g.zone === driestZone);
+          headline = `${g.gain} L redirected from already-moist ${moistZones.length === 1 ? 'zone' : 'zones'} to ${isDriest ? 'the driest zone' : 'drier Zone ' + g.zone}.`;
+          subline = `Spared ${moistWaterUsual} L from moist areas (${moistList}). ${g.gain} L was diverted to Zone ${g.zone} (${g.moisture}% moisture)${recPlan.waterLeft > 0 ? `, with ${recPlan.waterLeft} L preserved in reserve` : ''}.`;
+        } else if (gains.length > 1) {
+          const totalGained = gains.reduce((acc, item) => acc + item.gain, 0);
+          headline = `${totalGained} L redirected from already-moist zones to active deficit zones.`;
+          const gainSummary = gains.map(g => `Zone ${g.zone} (+${g.gain} L)`).join(', ');
+          subline = `Avoided watering moist areas (${moistList}). Water was reallocated to: ${gainSummary}${recPlan.waterLeft > 0 ? `, leaving ${recPlan.waterLeft} L in storage` : ''}.`;
+        } else {
+          // No gains (all spared water went to reserve, or budget ended up in reserve)
+          headline = `${moistWaterUsual} L withheld from already-moist ${moistZones.length === 1 ? 'zone' : 'zones'} and retained in reserve.`;
+          subline = `Rather than applying water to soil already at or above target (${moistList}), ${moistWaterUsual} L is conserved in storage for future irrigation needs.`;
+        }
+      } else {
+        // No zones were >= 25%
+        if (moistZones.length === 0) {
+          const validDeficitCount = zones.filter(z => !moistureData[z].isBlank).length;
+          headline = `All tested zones are below the 25% moisture target.`;
+          subline = `With ${budget} L total available, water is prioritized to the driest zones first in order of deficit severity (${recPlan.waterOrder.filter(w => w.allocated > 0).map(w => 'Zone ' + w.zone + ' (' + w.allocated + 'L)').join(', ') || '0 L allocated'}).`;
+        } else {
+          headline = `Identical baseline distribution between plans.`;
+          subline = `No water was redirected from above-target zones under current inputs.`;
+        }
+      }
+
+      return { headline, subline };
+    }
+
+    /**
+     * Renders results into the DOM.
+     */
+    function renderPlan(moistureData, budget, usualPlan, recPlan) {
+      // 1. Redirection Card
+      const redirection = deriveRedirectionMessage(moistureData, budget, usualPlan, recPlan);
+      document.getElementById('redirectionMessage').textContent = redirection.headline;
+      document.getElementById('redirectionSubMessage').textContent = redirection.subline;
+
+      // 2. Watering Priority Sequence
+      const sequenceContainer = document.getElementById('wateringSequence');
+      sequenceContainer.innerHTML = '';
+
+      if (recPlan.waterOrder.length === 0) {
+        const emptyDiv = document.createElement('div');
+        emptyDiv.className = 'step-pill';
+        emptyDiv.innerHTML = '<strong>No zones currently require irrigation</strong> (all valid zones &ge; 25% target or missing).';
+        sequenceContainer.appendChild(emptyDiv);
+      } else {
+        recPlan.waterOrder.forEach((step, idx) => {
+          if (idx > 0) {
+            const arrow = document.createElement('span');
+            arrow.className = 'step-arrow';
+            arrow.textContent = '→';
+            arrow.setAttribute('aria-hidden', 'true');
+            sequenceContainer.appendChild(arrow);
+          }
+
+          const pill = document.createElement('div');
+          pill.className = `step-pill ${step.allocated > 0 ? 'active' : ''}`;
+
+          let statusDetail = '';
+          if (step.allocated > 0 && !step.partial) {
+            statusDetail = `${step.allocated} L (Full Dose)`;
+          } else if (step.partial) {
+            statusDetail = `${step.allocated} L (Partial - Budget Limit)`;
+          } else {
+            statusDetail = `0 L (Budget Exhausted)`;
+          }
+
+          pill.innerHTML = `
+            <span class="badge-order">${step.rank} Priority</span>
+            <span><strong>Zone ${step.zone}</strong> (${step.moisture}%) : ${statusDetail}</span>
+          `;
+          sequenceContainer.appendChild(pill);
+        });
+
+        // Add note about non-watered zones
+        const nonWatered = ['A', 'B', 'C'].filter(z => !recPlan.waterOrder.some(w => w.zone === z));
+        if (nonWatered.length > 0) {
+          const sep = document.createElement('span');
+          sep.className = 'step-arrow';
+          sep.textContent = '|';
+          sequenceContainer.appendChild(sep);
+
+          nonWatered.forEach(z => {
+            const d = recPlan.details[z];
+            const pill = document.createElement('div');
+            pill.className = 'step-pill';
+            pill.innerHTML = `<span><strong>Zone ${z}</strong>: Skip (${d.isBlank ? 'Sensor Missing' : d.moisture + '% At Target'})</span>`;
+            sequenceContainer.appendChild(pill);
+          });
+        }
+      }
+
+      // 3. Comparison Table Body
+      const tbody = document.getElementById('comparisonTableBody');
+      tbody.innerHTML = '';
+
+      ['A', 'B', 'C'].forEach(zone => {
+        const tr = document.createElement('tr');
+
+        const rec = recPlan.details[zone];
+        const usualAlloc = usualPlan.alloc[zone];
+        const recAlloc = recPlan.alloc[zone];
+
+        let moistureCell = '';
+        if (rec.isBlank) {
+          moistureCell = `<span class="badge badge-missing">BLANK (MISSING)</span>`;
+        } else {
+          moistureCell = `<strong>${rec.moisture}%</strong><br><span class="badge ${rec.badgeClass}" style="margin-top: 4px;">${rec.badgeText}</span>`;
+        }
+
+        // Highlight difference in recommended column
+        let recAllocDisplay = `<strong>${recAlloc} L</strong>`;
+        if (recAlloc > usualAlloc) {
+          recAllocDisplay += `<br><span style="font-size: 0.8rem; font-weight: 700; color: var(--color-accent-border);">+${recAlloc - usualAlloc} L vs usual</span>`;
+        } else if (recAlloc < usualAlloc) {
+          recAllocDisplay += `<br><span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">${recAlloc - usualAlloc} L vs usual</span>`;
+        }
+
+        tr.innerHTML = `
+          <td class="col-zone"><strong>Zone ${zone}</strong></td>
+          <td class="col-moist">${moistureCell}</td>
+          <td class="col-usual"><strong>${usualAlloc} L</strong></td>
+          <td class="col-rec">${recAllocDisplay}</td>
+          <td class="col-reason">
+            <div style="font-weight: 600; color: var(--text);">${rec.finalReason}</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">${usualPlan.reasons[zone]}</div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // 4. Totals & Unallocated Rows
+      document.getElementById('usualTotalAlloc').innerHTML = `<strong>${usualPlan.totalAllocated} L</strong>`;
+      document.getElementById('recTotalAlloc').innerHTML = `<strong>${recPlan.totalAllocated} L</strong>`;
+
+      document.getElementById('usualWaterLeft').innerHTML = `<strong>${usualPlan.waterLeft} L</strong>`;
+      document.getElementById('recWaterLeft').innerHTML = `<strong>${recPlan.waterLeft} L</strong>`;
+
+      if (recPlan.waterLeft > 0) {
+        document.getElementById('reserveSummary').textContent = `${recPlan.waterLeft} L left unallocated in tank (deficit demand fully met or unverified sensors held back).`;
+      } else {
+        document.getElementById('reserveSummary').textContent = 'Entire water budget was allocated to active deficits.';
+      }
+    }
+
+    /**
+     * Master plan generation coordinator.
+     */
+    function handleMakePlan() {
+      const { isValid, errors, parsed } = validateInputs();
+      renderFieldErrors(errors);
+
+      if (!isValid) {
+        return;
+      }
+
+      const usual = computeUsualPlan(parsed.budget);
+      const rec = computeRecommendedPlan(parsed.moisture, parsed.budget);
+      renderPlan(parsed.moisture, parsed.budget, usual, rec);
+    }
+
+    /**
+     * Real-time live update while typing.
+     */
+    function handleLiveInput() {
+      handleMakePlan();
+    }
+
+    /**
+     * Resets inputs to default demo example values.
+     */
+    function loadDemoValues() {
+      document.getElementById('moistureA').value = DEMO_VALUES.moistureA;
+      document.getElementById('moistureB').value = DEMO_VALUES.moistureB;
+      document.getElementById('moistureC').value = DEMO_VALUES.moistureC;
+      document.getElementById('waterBudget').value = DEMO_VALUES.waterBudget;
+      handleMakePlan();
+    }
+
+    /**
+     * Preset loader for rapid testing and hackathon judging.
+     */
+    function loadScenario(type) {
+      if (type === 'default') {
+        loadDemoValues();
+      } else if (type === 'missingC') {
+        document.getElementById('moistureA').value = '32';
+        document.getElementById('moistureB').value = '22';
+        document.getElementById('moistureC').value = '';
+        document.getElementById('waterBudget').value = '30';
+        handleMakePlan();
+      } else if (type === 'budget15') {
+        document.getElementById('moistureA').value = '32';
+        document.getElementById('moistureB').value = '22';
+        document.getElementById('moistureC').value = '15';
+        document.getElementById('waterBudget').value = '15';
+        handleMakePlan();
+      } else if (type === 'budget0') {
+        document.getElementById('moistureA').value = '32';
+        document.getElementById('moistureB').value = '22';
+        document.getElementById('moistureC').value = '15';
+        document.getElementById('waterBudget').value = '0';
+        handleMakePlan();
+      } else if (type === 'aboveTarget') {
+        document.getElementById('moistureA').value = '28';
+        document.getElementById('moistureB').value = '35';
+        document.getElementById('moistureC').value = '42';
+        document.getElementById('waterBudget').value = '30';
+        handleMakePlan();
+      } else if (type === 'equalReadings') {
+        document.getElementById('moistureA').value = '18';
+        document.getElementById('moistureB').value = '18';
+        document.getElementById('moistureC').value = '18';
+        document.getElementById('waterBudget').value = '30';
+        handleMakePlan();
+      } else if (type === 'zeroMoisture') {
+        document.getElementById('moistureA').value = '28';
+        document.getElementById('moistureB').value = '21';
+        document.getElementById('moistureC').value = '0';
+        document.getElementById('waterBudget').value = '30';
+        handleMakePlan();
+      }
+    }
+
+    // Initialize on page load with demo values
+    window.addEventListener('DOMContentLoaded', () => {
+      loadDemoValues();
+    });
+  </script>
+</body>
+</html>
