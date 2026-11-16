@@ -3,15 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Desert Irrigation Planner - Neobrutalism Edition</title>
+  <title>Desert Irrigation Planner - Smart Desert Farming</title>
   <style>
     /* -------------------------------------------------------------
-       AESTHETIC NEOBRUTALISM DESIGN SYSTEM
-       Warm vanilla & soft pastel palette with bold, tactile 3D borders.
+       AESTHETIC NEOBRUTALISM + RETRO PIXEL ART LANDING SYSTEM
        Zero external fonts, zero external libraries, 100% offline.
     -------------------------------------------------------------- */
     :root {
-      /* Warm Pastel & Cream Neobrutalism Palette */
+      /* Warm Palette */
       --bg-canvas: #fbf8f3;
       --card-bg: #ffffff;
       --card-warm: #fffdf9;
@@ -23,12 +22,10 @@
 
       /* Tactile Hard Drop Shadows */
       --shadow-card: 4px 4px 0px var(--border-dark);
-      --shadow-card-hover: 6px 6px 0px var(--border-dark);
       --shadow-btn: 3px 3px 0px var(--border-dark);
       --shadow-btn-hover: 4px 4px 0px var(--border-dark);
-      --shadow-pill: 2px 2px 0px var(--border-dark);
 
-      /* Pleasing Soft Pastels */
+      /* Pastels */
       --pastel-green: #86efac;
       --pastel-green-light: #dcfce7;
       --pastel-blue: #7dd3fc;
@@ -37,13 +34,11 @@
       --pastel-yellow-light: #fef9c3;
       --pastel-red: #fca5a5;
       --pastel-red-light: #fee2e2;
-      --pastel-purple: #d8b4fe;
-      --pastel-orange: #fdba74;
 
       --radius: 12px;
       --radius-sm: 8px;
       --radius-pill: 9999px;
-      --transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+      --transition: all 0.15s ease;
     }
 
     * {
@@ -70,33 +65,33 @@
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
     }
 
-    /* ---------------- NEOBRUTALIST TOP NAVIGATION ---------------- */
+    /* ---------------- TOP NAVIGATION BAR ---------------- */
     header.main-nav-header {
       background: var(--card-bg);
       border: var(--border-thick);
       border-radius: var(--radius);
       box-shadow: var(--shadow-card);
-      padding: 12px 20px;
+      padding: 10px 18px;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
     .brand-wrap {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       cursor: pointer;
     }
 
     .brand-icon-box {
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
       border: var(--border-medium);
       border-radius: var(--radius-sm);
       background: var(--pastel-green);
@@ -108,24 +103,23 @@
     }
 
     .brand-name {
-      font-size: 1.25rem;
+      font-size: 1.18rem;
       font-weight: 900;
       letter-spacing: -0.02em;
       color: var(--ink);
     }
 
     .brand-sub {
-      font-size: 0.76rem;
+      font-size: 0.72rem;
       color: var(--ink-muted);
       font-weight: 700;
     }
 
-    /* Neobrutal Nav Pills */
     nav.nav-links {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .nav-btn {
@@ -133,9 +127,9 @@
       outline: none;
       background: var(--card-bg);
       color: var(--ink);
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 800;
-      padding: 8px 14px;
+      padding: 7px 13px;
       border-radius: var(--radius-pill);
       cursor: pointer;
       box-shadow: 2px 2px 0px var(--border-dark);
@@ -148,7 +142,6 @@
     .nav-btn:hover {
       transform: translate(-1px, -1px);
       box-shadow: 3px 3px 0px var(--border-dark);
-      background: #fafafa;
     }
 
     .nav-btn:active {
@@ -158,13 +151,12 @@
 
     .nav-btn.active {
       background: var(--pastel-yellow);
-      box-shadow: 2px 2px 0px var(--border-dark);
     }
 
-    /* Page View Containers */
+    /* Page Switcher */
     .page-section {
       display: none;
-      animation: pagePop 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: pagePop 0.18s ease-out forwards;
     }
 
     .page-section.active-page {
@@ -176,15 +168,15 @@
       to { opacity: 1; transform: scale(1); }
     }
 
-    /* ---------------- NEOBRUTALIST BUTTONS ---------------- */
+    /* ---------------- BUTTONS ---------------- */
     button.neo-btn {
       border: var(--border-thick);
       outline: none;
-      min-height: 44px;
+      min-height: 42px;
       border-radius: var(--radius-sm);
-      padding: 10px 18px;
-      font-size: 0.92rem;
-      font-weight: 800;
+      padding: 9px 16px;
+      font-size: 0.9rem;
+      font-weight: 900;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -195,244 +187,290 @@
       color: var(--ink);
     }
 
-    button.btn-primary {
-      background: var(--pastel-green);
-    }
-
+    button.btn-primary { background: var(--pastel-green); }
     button.btn-primary:hover {
       background: #4ade80;
       transform: translate(-2px, -2px);
       box-shadow: var(--shadow-btn-hover);
     }
-
     button.btn-primary:active {
       transform: translate(3px, 3px);
       box-shadow: 0px 0px 0px var(--border-dark);
     }
 
-    button.btn-secondary {
-      background: var(--card-bg);
-    }
-
+    button.btn-secondary { background: var(--card-bg); }
     button.btn-secondary:hover {
       background: #f4f4f5;
       transform: translate(-2px, -2px);
       box-shadow: var(--shadow-btn-hover);
     }
-
     button.btn-secondary:active {
       transform: translate(3px, 3px);
       box-shadow: 0px 0px 0px var(--border-dark);
     }
 
-    button.btn-accent-blue {
-      background: var(--pastel-blue);
-    }
-    button.btn-accent-blue:hover {
-      background: #38bdf8;
-      transform: translate(-2px, -2px);
-      box-shadow: var(--shadow-btn-hover);
-    }
-    button.btn-accent-blue:active {
-      transform: translate(3px, 3px);
-      box-shadow: 0px 0px 0px var(--border-dark);
-    }
-
-    /* ---------------- PAGE 1: LANDING HERO (NEOBRUTALISM) ---------------- */
-    .landing-layout {
+    /* =============================================================
+       PAGE 1: PIXEL ART LANDING PAGE (RETRO 8-BIT DESERT GREENHOUSE)
+    ============================================================== */
+    .pixel-landing {
+      background: #faf5eb;
+      border: 3px solid #18181b;
+      box-shadow: 6px 6px 0px #18181b;
+      border-radius: 4px;
+      padding: 36px 28px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
-    }
-
-    .hero-banner {
-      background: var(--card-bg);
-      border: var(--border-thick);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-card);
-      padding: 38px 32px;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 26px;
+      gap: 28px;
       position: relative;
     }
 
-    @media (min-width: 860px) {
-      .hero-banner {
+    /* Pixel Art Hero Row */
+    .pixel-hero-wrap {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    @media (min-width: 820px) {
+      .pixel-hero-wrap {
         grid-template-columns: 1.25fr 0.95fr;
-        align-items: center;
       }
     }
 
-    .badge-pill-row {
+    .pixel-badge-row {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       margin-bottom: 12px;
     }
 
-    .neo-pill {
-      font-size: 0.74rem;
+    .pixel-badge {
+      display: inline-block;
+      font-family: "Courier New", Courier, monospace;
       font-weight: 900;
-      padding: 4px 12px;
-      border: var(--border-medium);
-      border-radius: var(--radius-pill);
-      box-shadow: var(--shadow-pill);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      padding: 4px 10px;
+      border: 2px solid #18181b;
+      box-shadow: 2px 2px 0px #18181b;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      background: var(--pastel-yellow);
     }
 
-    .pill-green { background: var(--pastel-green); color: var(--ink); }
-    .pill-yellow { background: var(--pastel-yellow); color: var(--ink); }
-    .pill-blue { background: var(--pastel-blue); color: var(--ink); }
-    .pill-red { background: var(--pastel-red); color: var(--ink); }
-    .pill-purple { background: var(--pastel-purple); color: var(--ink); }
-
-    .hero-title {
-      font-size: 2.3rem;
+    .pixel-title {
+      font-family: "Courier New", Courier, monospace;
       font-weight: 900;
-      color: var(--ink);
+      font-size: 2.2rem;
       line-height: 1.15;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.01em;
+      color: #18181b;
       margin-bottom: 12px;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 0px #fde047;
     }
 
-    .hero-subtitle {
-      font-size: 1.05rem;
-      color: var(--ink-muted);
-      line-height: 1.55;
+    .pixel-desc {
+      font-family: "Courier New", Courier, monospace;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #3f3f46;
+      line-height: 1.6;
       margin-bottom: 22px;
-      font-weight: 500;
     }
 
-    .hero-cta-row {
+    .pixel-cta-row {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
     }
 
-    /* Hero Right Showcase Card */
-    .hero-preview-box {
-      background: var(--pastel-yellow-light);
-      border: var(--border-thick);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-card);
-      padding: 22px;
+    .pixel-btn-primary {
+      font-family: "Courier New", Courier, monospace;
+      font-weight: 900;
+      font-size: 0.95rem;
+      padding: 12px 22px;
+      border: 3px solid #18181b;
+      background: #86efac;
+      box-shadow: 4px 4px 0px #18181b;
+      color: #18181b;
+      cursor: pointer;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+
+    .pixel-btn-primary:hover {
+      background: #4ade80;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px #18181b;
+    }
+
+    .pixel-btn-primary:active {
+      transform: translate(4px, 4px);
+      box-shadow: 0px 0px 0px #18181b;
+    }
+
+    .pixel-btn-secondary {
+      font-family: "Courier New", Courier, monospace;
+      font-weight: 900;
+      font-size: 0.95rem;
+      padding: 12px 20px;
+      border: 3px solid #18181b;
+      background: #ffffff;
+      box-shadow: 4px 4px 0px #18181b;
+      color: #18181b;
+      cursor: pointer;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+
+    .pixel-btn-secondary:hover {
+      background: #f4f4f5;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px #18181b;
+    }
+
+    .pixel-btn-secondary:active {
+      transform: translate(4px, 4px);
+      box-shadow: 0px 0px 0px #18181b;
+    }
+
+    /* Pixel Art Illustrated Showcase Box */
+    .pixel-showcase-box {
+      background: #fff;
+      border: 3px solid #18181b;
+      box-shadow: 4px 4px 0px #18181b;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       gap: 14px;
-    }
-
-    .preview-stat-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      align-items: center;
       text-align: center;
     }
 
-    .preview-stat-card {
-      background: #ffffff;
-      border: var(--border-medium);
-      border-radius: var(--radius-sm);
-      box-shadow: 2px 2px 0px var(--border-dark);
-      padding: 10px 6px;
+    .pixel-scene {
       display: flex;
-      flex-direction: column;
-      gap: 2px;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 14px 0;
     }
 
-    .preview-stat-num {
-      font-size: 1.35rem;
+    /* Pixel Stat Tiles */
+    .pixel-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      width: 100%;
+    }
+
+    .pixel-stat-card {
+      border: 2px solid #18181b;
+      padding: 8px 4px;
+      background: #fef9c3;
+      box-shadow: 2px 2px 0px #18181b;
+    }
+
+    .pixel-stat-val {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 1.15rem;
       font-weight: 900;
-      color: var(--ink);
+      color: #18181b;
     }
 
-    .preview-stat-lbl {
-      font-size: 0.68rem;
+    .pixel-stat-lbl {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.65rem;
       font-weight: 800;
-      color: var(--ink-muted);
+      color: #71717a;
       text-transform: uppercase;
     }
 
-    /* 3 Pillars Neobrutal Cards */
-    .features-grid {
+    /* 3 Retro Gateway Cards */
+    .pixel-gateways-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 18px;
+      gap: 16px;
     }
 
     @media (min-width: 768px) {
-      .features-grid {
+      .pixel-gateways-grid {
         grid-template-columns: repeat(3, 1fr);
       }
     }
 
-    .feature-card {
-      background: var(--card-bg);
-      border: var(--border-thick);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-card);
-      padding: 22px;
+    .pixel-gateway-card {
+      background: #ffffff;
+      border: 3px solid #18181b;
+      box-shadow: 4px 4px 0px #18181b;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       gap: 10px;
+      cursor: pointer;
       transition: var(--transition);
     }
 
-    .feature-card:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: var(--shadow-card-hover);
+    .pixel-gateway-card:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 7px 7px 0px #18181b;
+      background: #fafaf9;
     }
 
-    .feature-icon-badge {
-      width: 44px;
-      height: 44px;
-      border: var(--border-medium);
-      border-radius: var(--radius-sm);
-      box-shadow: 2px 2px 0px var(--border-dark);
+    .pixel-gateway-card:active {
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0px #18181b;
+    }
+
+    .gateway-icon {
+      width: 48px;
+      height: 48px;
+      border: 2px solid #18181b;
+      box-shadow: 2px 2px 0px #18181b;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 4px;
     }
 
-    .feature-title {
-      font-size: 1.15rem;
+    .gateway-title {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 1.05rem;
       font-weight: 900;
-      color: var(--ink);
+      text-transform: uppercase;
     }
 
-    .feature-desc {
-      font-size: 0.88rem;
+    .gateway-desc {
+      font-size: 0.85rem;
       color: var(--ink-muted);
-      line-height: 1.5;
+      line-height: 1.45;
     }
 
-    /* ---------------- PAGE 2: TWO-COLUMN PLANNER LAYOUT ---------------- */
+    /* =============================================================
+       PAGE 2: LIVE PLANNER (SIMPLIFIED & ORGANIZED TWO-COLUMN LAYOUT)
+    ============================================================== */
     .two-column-layout {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 18px;
+      gap: 16px;
       align-items: start;
     }
 
     @media (min-width: 900px) {
       .two-column-layout {
-        grid-template-columns: 360px 1fr;
+        grid-template-columns: 340px 1fr;
       }
     }
 
     @media (min-width: 1100px) {
       .two-column-layout {
-        grid-template-columns: 390px 1fr;
+        grid-template-columns: 360px 1fr;
       }
-    }
-
-    /* Left Sidebar */
-    .sidebar-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
     }
 
     .neo-card {
@@ -440,11 +478,11 @@
       border: var(--border-thick);
       border-radius: var(--radius);
       box-shadow: var(--shadow-card);
-      padding: 20px;
+      padding: 18px;
     }
 
     .panel-header-title {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 900;
       color: var(--ink);
       display: flex;
@@ -454,29 +492,20 @@
     }
 
     .panel-header-sub {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--ink-muted);
       margin-bottom: 12px;
-      font-weight: 500;
+      font-weight: 600;
     }
 
+    /* Sidebar Clean Controls */
     .presets-group {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 14px;
-      padding-bottom: 12px;
+      gap: 5px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
       border-bottom: 1.5px dashed var(--border-dark);
-    }
-
-    .presets-caption {
-      width: 100%;
-      font-size: 0.72rem;
-      font-weight: 900;
-      color: var(--ink-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 2px;
     }
 
     .btn-preset {
@@ -485,9 +514,9 @@
       background: var(--card-bg);
       box-shadow: 2px 2px 0px var(--border-dark);
       color: var(--ink);
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       font-weight: 800;
-      padding: 5px 10px;
+      padding: 4px 8px;
       border-radius: var(--radius-pill);
       cursor: pointer;
       transition: var(--transition);
@@ -504,11 +533,10 @@
       box-shadow: 0px 0px 0px var(--border-dark);
     }
 
-    /* Zone Input Cards */
     .zone-input-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
 
     .zone-input-card {
@@ -516,10 +544,10 @@
       border: var(--border-medium);
       border-radius: var(--radius-sm);
       box-shadow: 2px 2px 0px var(--border-dark);
-      padding: 12px 14px;
+      padding: 10px 12px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
 
     .zone-card-top {
@@ -530,17 +558,17 @@
 
     .zone-name {
       font-weight: 900;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: var(--ink);
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
 
     .zone-status-badge {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 900;
-      padding: 2px 8px;
+      padding: 2px 7px;
       border: 1.5px solid var(--border-dark);
       border-radius: var(--radius-pill);
       box-shadow: 1.5px 1.5px 0px var(--border-dark);
@@ -560,13 +588,13 @@
 
     .neo-input {
       width: 100%;
-      height: 42px;
+      height: 38px;
       background: #ffffff;
       border: var(--border-medium);
       border-radius: var(--radius-sm);
-      box-shadow: 2px 2px 0px rgba(0,0,0,0.06);
-      padding: 6px 36px 6px 12px;
-      font-size: 1.15rem;
+      box-shadow: 1.5px 1.5px 0px rgba(0,0,0,0.06);
+      padding: 5px 34px 5px 10px;
+      font-size: 1.1rem;
       font-weight: 900;
       color: var(--ink);
       outline: none;
@@ -593,17 +621,16 @@
 
     .input-suffix {
       position: absolute;
-      right: 12px;
-      font-size: 0.9rem;
+      right: 10px;
+      font-size: 0.85rem;
       font-weight: 900;
       color: var(--ink-muted);
       pointer-events: none;
     }
 
-    /* Live Mini Moisture Bar */
     .mini-gauge-track {
       width: 100%;
-      height: 8px;
+      height: 6px;
       background: #e4e4e7;
       border: 1.5px solid var(--border-dark);
       border-radius: var(--radius-pill);
@@ -623,118 +650,99 @@
     .mini-gauge-fill.fill-critical { background: var(--pastel-red); }
 
     .field-error-msg {
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-weight: 800;
       color: #b91c1c;
       display: none;
     }
     .field-error-msg.visible { display: block; }
 
-    /* Budget Input Box */
     .budget-card {
       background: var(--pastel-blue-light);
       border: var(--border-medium);
       border-radius: var(--radius-sm);
       box-shadow: 2px 2px 0px var(--border-dark);
-      padding: 14px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .sidebar-actions {
       display: flex;
       flex-direction: column;
       gap: 8px;
       margin-top: 12px;
     }
 
-    .sidebar-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    /* Withhold Banner */
     .withhold-banner {
       display: none;
-      padding: 14px 16px;
+      padding: 12px 14px;
       background: var(--pastel-red-light);
       border: var(--border-thick);
       border-radius: var(--radius);
       box-shadow: var(--shadow-card);
       color: #991b1b;
       font-weight: 800;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       line-height: 1.4;
+      margin-top: 10px;
     }
     .withhold-banner.visible { display: block; }
 
-    /* Right Main Panel Content */
+    /* Right Main Panel: Streamlined & Organized */
     .main-content-panel {
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
     }
 
-    /* 1. HERO REDIRECTION HIGHLIGHT CARD */
     .hero-redirection-card {
       background: var(--pastel-green-light);
       border: var(--border-thick);
       border-radius: var(--radius);
       box-shadow: var(--shadow-card);
-      padding: 22px 24px;
-      position: relative;
-    }
-
-    .redirection-badge-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
+      padding: 18px 20px;
     }
 
     .badge-insight {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       background: #ffffff;
       border: var(--border-medium);
       box-shadow: 2px 2px 0px var(--border-dark);
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: var(--radius-pill);
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 900;
       color: var(--ink);
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      margin-bottom: 6px;
     }
 
     .redirection-headline {
-      font-size: 1.4rem;
+      font-size: 1.35rem;
       font-weight: 900;
       color: var(--ink);
-      line-height: 1.35;
+      line-height: 1.3;
       letter-spacing: -0.01em;
     }
 
     .redirection-subline {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--ink-muted);
-      margin-top: 6px;
-      line-height: 1.5;
-      font-weight: 500;
-    }
-
-    /* 2. RECOMMENDED WATERING SEQUENCE */
-    .sequence-panel {
-      background: var(--card-bg);
-      border: var(--border-thick);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-card);
-      padding: 20px 22px;
+      margin-top: 4px;
+      font-weight: 600;
     }
 
     .sequence-cards-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 12px;
-      margin-top: 14px;
+      gap: 10px;
+      margin-top: 10px;
     }
 
     @media (min-width: 640px) {
@@ -748,29 +756,22 @@
       border: var(--border-medium);
       border-radius: var(--radius-sm);
       box-shadow: 2px 2px 0px var(--border-dark);
-      padding: 16px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      position: relative;
+      gap: 6px;
     }
 
     .seq-step-card.active-priority {
       background: #ffffff;
-      box-shadow: 4px 4px 0px var(--border-dark);
+      box-shadow: 3px 3px 0px var(--border-dark);
       border: var(--border-thick);
     }
 
-    .seq-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
     .priority-pill {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 900;
-      padding: 3px 8px;
+      padding: 2px 7px;
       border: 1.5px solid var(--border-dark);
       border-radius: var(--radius-pill);
       box-shadow: 1.5px 1.5px 0px var(--border-dark);
@@ -781,41 +782,33 @@
     .priority-pill.skip { background: #e4e4e7; color: var(--ink-muted); }
 
     .seq-zone-title {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 900;
       color: var(--ink);
     }
 
     .seq-dose-amount {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 900;
       color: #047857;
       line-height: 1;
     }
     .seq-dose-amount.partial { color: #b45309; }
-    .seq-dose-amount.zero { color: var(--ink-muted); font-size: 1.2rem; }
+    .seq-dose-amount.zero { color: var(--ink-muted); font-size: 1.15rem; }
 
     .seq-reason-desc {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--ink-muted);
-      line-height: 1.4;
-      font-weight: 500;
+      line-height: 1.35;
+      font-weight: 600;
     }
 
-    /* 3. SIDE-BY-SIDE SCHEDULE COMPARISON */
-    .comparison-panel {
-      background: var(--card-bg);
-      border: var(--border-thick);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-card);
-      padding: 20px 22px;
-    }
-
+    /* Comparison Table Streamlined */
     .comp-rows-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin-top: 14px;
+      gap: 10px;
+      margin-top: 10px;
     }
 
     .comp-row-card {
@@ -823,21 +816,21 @@
       border: var(--border-medium);
       border-radius: var(--radius-sm);
       box-shadow: 2px 2px 0px var(--border-dark);
-      padding: 14px 18px;
+      padding: 12px 16px;
       display: grid;
       grid-template-columns: 1fr;
-      gap: 10px;
+      gap: 8px;
     }
 
     @media (min-width: 680px) {
       .comp-row-card {
-        grid-template-columns: 140px 110px 140px 1fr;
+        grid-template-columns: 130px 100px 130px 1fr;
         align-items: center;
       }
     }
 
     .cell-label {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 900;
       color: var(--ink-muted);
       text-transform: uppercase;
@@ -845,21 +838,21 @@
     }
 
     .cell-val {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 900;
       color: var(--ink);
     }
 
     .cell-val.rec-val {
       color: #047857;
-      font-size: 1.3rem;
+      font-size: 1.25rem;
     }
 
     .diff-badge {
       display: inline-block;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 900;
-      padding: 2px 7px;
+      padding: 2px 6px;
       border: 1.5px solid var(--border-dark);
       border-radius: var(--radius-pill);
       box-shadow: 1.5px 1.5px 0px var(--border-dark);
@@ -868,12 +861,11 @@
     .diff-badge.gain { background: var(--pastel-green); color: var(--ink); }
     .diff-badge.loss { background: #e4e4e7; color: var(--ink-muted); }
 
-    /* Summary Dashboard Cards */
     .summary-metrics-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 12px;
-      margin-top: 14px;
+      gap: 10px;
+      margin-top: 12px;
     }
 
     @media (min-width: 600px) {
@@ -887,41 +879,38 @@
       border: var(--border-medium);
       border-radius: var(--radius-sm);
       box-shadow: 2px 2px 0px var(--border-dark);
-      padding: 14px 18px;
+      padding: 12px 16px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2px;
     }
 
     .metric-value-row {
       display: flex;
       align-items: baseline;
-      gap: 16px;
+      gap: 14px;
       margin-top: 2px;
     }
 
     .stat-number {
-      font-size: 1.45rem;
+      font-size: 1.35rem;
       font-weight: 900;
       color: var(--ink);
     }
 
-    /* ---------------- PAGE 3: DEDICATED COMPARISON LAYOUT ---------------- */
-    .comparison-layout {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
+    /* =============================================================
+       PAGE 3: SCHEDULE COMPARISON & TANK LAYOUT
+    ============================================================== */
     .tank-showcase-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 20px;
+      gap: 18px;
+      margin-top: 14px;
     }
 
     @media (min-width: 800px) {
       .tank-showcase-grid {
-        grid-template-columns: 280px 1fr;
+        grid-template-columns: 260px 1fr;
       }
     }
 
@@ -930,20 +919,20 @@
       border: var(--border-thick);
       border-radius: var(--radius);
       box-shadow: var(--shadow-card);
-      padding: 24px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       text-align: center;
     }
 
     .tank-cylinder {
-      width: 120px;
-      height: 180px;
+      width: 110px;
+      height: 160px;
       background: #f4f4f5;
       border: var(--border-thick);
-      border-radius: 16px;
+      border-radius: 14px;
       position: relative;
       overflow: hidden;
       display: flex;
@@ -957,53 +946,46 @@
       background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
       border-top: var(--border-medium);
       transition: height 0.5s ease;
-      position: relative;
     }
 
-    /* ---------------- PAGE 4: SIMULATION RULES LAYOUT ---------------- */
-    .rules-page-layout {
+    .rule-box-card {
+      border: var(--border-thick);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+      padding: 18px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 6px;
+      background: #ffffff;
     }
 
+    .rule-box-card strong {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--ink);
+    }
+
+    .rule-box-card p {
+      font-size: 0.85rem;
+      color: var(--ink-muted);
+      line-height: 1.45;
+      font-weight: 600;
+    }
+
+    /* =============================================================
+       PAGE 4: DECISION RULES LAYOUT
+    ============================================================== */
     .rules-grid-full {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 16px;
+      gap: 14px;
+      margin-top: 14px;
     }
 
     @media (min-width: 680px) {
       .rules-grid-full {
         grid-template-columns: 1fr 1fr;
       }
-    }
-
-    .rule-box-card {
-      background: var(--card-bg);
-      border: var(--border-thick);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-card);
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .rule-box-card strong {
-      font-size: 1.05rem;
-      font-weight: 900;
-      color: var(--ink);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .rule-box-card p {
-      font-size: 0.88rem;
-      color: var(--ink-muted);
-      line-height: 1.5;
-      font-weight: 500;
     }
 
     /* Screen Reader & Test Compatibility */
@@ -1017,15 +999,6 @@
       clip: rect(0, 0, 0, 0);
       border: 0;
     }
-
-    /* Footer */
-    footer {
-      text-align: center;
-      font-size: 0.82rem;
-      color: var(--ink-muted);
-      font-weight: 700;
-      padding: 12px 0 20px;
-    }
   </style>
 </head>
 <body>
@@ -1035,9 +1008,14 @@
     <header class="main-nav-header">
       <div class="brand-wrap" onclick="navigateToPage('landing')">
         <div class="brand-icon-box" aria-hidden="true">
-          <!-- Desert Droplet Icon -->
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+          <!-- Pixel/Retro Droplet Icon -->
+          <svg width="22" height="22" viewBox="0 0 12 12" shape-rendering="crispEdges">
+            <rect x="5" y="1" width="2" height="2" fill="#18181b"/>
+            <rect x="4" y="3" width="4" height="2" fill="#18181b"/>
+            <rect x="3" y="5" width="6" height="2" fill="#18181b"/>
+            <rect x="2" y="7" width="8" height="3" fill="#18181b"/>
+            <rect x="4" y="10" width="4" height="1" fill="#18181b"/>
+            <rect x="4" y="5" width="2" height="3" fill="#ffffff"/>
           </svg>
         </div>
         <div>
@@ -1048,7 +1026,7 @@
 
       <nav class="nav-links" aria-label="Main Navigation">
         <button type="button" class="nav-btn active" id="navLanding" onclick="navigateToPage('landing')">
-          <span>🏡 Overview</span>
+          <span>👾 Home (Pixel Art)</span>
         </button>
         <button type="button" class="nav-btn" id="navPlanner" onclick="navigateToPage('planner')">
           <span>📊 Live Planner</span>
@@ -1062,98 +1040,133 @@
       </nav>
     </header>
 
-    <!-- ================= PAGE 1: LANDING PAGE ================= -->
+    <!-- =============================================================
+         PAGE 1: PIXEL ART LANDING PAGE (RETRO 8-BIT EXPERIENCE)
+    ============================================================== -->
     <section id="pageLanding" class="page-section active-page">
-      <div class="landing-layout">
-        <!-- Hero Banner -->
-        <div class="hero-banner">
+      <div class="pixel-landing">
+        <div class="pixel-hero-wrap">
           <div>
-            <div class="badge-pill-row">
-              <span class="neo-pill pill-green">🌵 Breaking Bytes Hackathon</span>
-              <span class="neo-pill pill-blue">Smart Farming for the Desert</span>
+            <div class="pixel-badge-row">
+              <span class="pixel-badge">🎮 BREAKING BYTES</span>
+              <span class="pixel-badge" style="background: var(--pastel-blue);">DESERT SMART FARM</span>
+              <span class="pixel-badge" style="background: var(--pastel-green);">V1.0</span>
             </div>
-            <h1 class="hero-title">Ration Scarce Water Where Desert Crops Need It Most</h1>
-            <p class="hero-subtitle">
-              When daily greenhouse irrigation is severely restricted, traditional equal-split routines waste litres on already-moist soil. Desert Irrigation Planner prioritizes water strictly to critical root deficits before supply runs dry.
+            <h1 class="pixel-title">DESERT IRRIGATION PLANNER</h1>
+            <p class="pixel-desc">
+              [SYSTEM ONLINE] In arid desert greenhouses, water is strictly rationed. Conventional schedules waste precious litres on damp soil. This smart system routes water to parched roots first before the tank runs dry.
             </p>
-            <div class="hero-cta-row">
-              <button type="button" class="neo-btn btn-primary" onclick="navigateToPage('planner')">
-                ⚡ Launch Live Planner &rarr;
+            <div class="pixel-cta-row">
+              <button type="button" class="pixel-btn-primary" onclick="navigateToPage('planner')">
+                ▶ START PLANNER
               </button>
-              <button type="button" class="neo-btn btn-secondary" onclick="navigateToPage('rules')">
-                Explore Decision Rules
+              <button type="button" class="pixel-btn-secondary" onclick="navigateToPage('rules')">
+                📜 MISSION RULES
               </button>
             </div>
           </div>
 
-          <div class="hero-preview-box">
-            <div style="font-weight: 900; font-size: 1rem; color: var(--ink); display: flex; align-items: center; gap: 8px;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-              Default Hackathon Baseline
+          <!-- Pixel Art Illustration Graphic -->
+          <div class="pixel-showcase-box">
+            <div style="font-family: 'Courier New', monospace; font-weight: 900; font-size: 0.82rem; text-transform: uppercase;">
+              ✦ GREENHOUSE SECTOR ALPHA ✦
             </div>
-            <p style="font-size: 0.82rem; color: var(--ink-muted); font-weight: 600;">
-              3 greenhouse zones (32%, 22%, 15% moisture) with 30 L total daily budget:
-            </p>
-            <div class="preview-stat-grid">
-              <div class="preview-stat-card">
-                <span class="preview-stat-num">20 L</span>
-                <span class="preview-stat-lbl">Zone C (15%)</span>
+            <div class="pixel-scene">
+              <!-- Pixel Cactus SVG -->
+              <svg width="56" height="56" viewBox="0 0 16 16" shape-rendering="crispEdges">
+                <!-- Ground -->
+                <rect x="0" y="14" width="16" height="2" fill="#d97706"/>
+                <!-- Cactus Stem -->
+                <rect x="7" y="3" width="2" height="11" fill="#15803d"/>
+                <rect x="8" y="3" width="1" height="11" fill="#16a34a"/>
+                <!-- Left Arm -->
+                <rect x="4" y="6" width="3" height="2" fill="#15803d"/>
+                <rect x="4" y="4" width="2" height="3" fill="#15803d"/>
+                <!-- Right Arm -->
+                <rect x="9" y="8" width="3" height="2" fill="#16a34a"/>
+                <rect x="10" y="6" width="2" height="3" fill="#16a34a"/>
+                <!-- Flower -->
+                <rect x="7" y="1" width="2" height="2" fill="#ef4444"/>
+              </svg>
+
+              <!-- Pixel Sun SVG -->
+              <svg width="56" height="56" viewBox="0 0 16 16" shape-rendering="crispEdges">
+                <rect x="5" y="5" width="6" height="6" fill="#facc15"/>
+                <rect x="6" y="6" width="4" height="4" fill="#fbbf24"/>
+                <rect x="7" y="2" width="2" height="2" fill="#f59e0b"/>
+                <rect x="7" y="12" width="2" height="2" fill="#f59e0b"/>
+                <rect x="2" y="7" width="2" height="2" fill="#f59e0b"/>
+                <rect x="12" y="7" width="2" height="2" fill="#f59e0b"/>
+              </svg>
+
+              <!-- Pixel Water Drop SVG -->
+              <svg width="56" height="56" viewBox="0 0 16 16" shape-rendering="crispEdges">
+                <rect x="7" y="3" width="2" height="2" fill="#0284c7"/>
+                <rect x="6" y="5" width="4" height="2" fill="#0284c7"/>
+                <rect x="5" y="7" width="6" height="4" fill="#0284c7"/>
+                <rect x="6" y="11" width="4" height="2" fill="#0284c7"/>
+                <rect x="6" y="6" width="2" height="3" fill="#7dd3fc"/>
+              </svg>
+            </div>
+
+            <!-- Pixel Mission Stats -->
+            <div class="pixel-stats-grid">
+              <div class="pixel-stat-card">
+                <div class="pixel-stat-val">3</div>
+                <div class="pixel-stat-lbl">ZONES</div>
               </div>
-              <div class="preview-stat-card">
-                <span class="preview-stat-num">10 L</span>
-                <span class="preview-stat-lbl">Zone B (22%)</span>
+              <div class="pixel-stat-card">
+                <div class="pixel-stat-val">25%</div>
+                <div class="pixel-stat-lbl">TARGET</div>
               </div>
-              <div class="preview-stat-card">
-                <span class="preview-stat-num" style="color: var(--ink-muted);">0 L</span>
-                <span class="preview-stat-lbl">Zone A (32%)</span>
+              <div class="pixel-stat-card">
+                <div class="pixel-stat-val">30 L</div>
+                <div class="pixel-stat-lbl">SUPPLY</div>
               </div>
             </div>
-            <div style="background: #ffffff; border: var(--border-medium); border-radius: var(--radius-sm); padding: 10px 14px; box-shadow: 2px 2px 0px var(--border-dark); font-size: 0.84rem; font-weight: 800; color: var(--ink);">
-              ✨ <strong>10 L redirected</strong> from moist Zone A directly to parched Zone C!
+
+            <div style="font-family: 'Courier New', monospace; font-size: 0.78rem; font-weight: 800; background: #e0f2fe; border: 2px solid #18181b; padding: 6px; width: 100%;">
+              [ALERT] 10 L MOVED FROM ZONE A &rarr; ZONE C
             </div>
           </div>
         </div>
 
-        <!-- 3 Feature Pillars Grid -->
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon-badge" style="background: var(--pastel-green);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+        <!-- 3 Retro Gateways to App Features -->
+        <div class="pixel-gateways-grid">
+          <div class="pixel-gateway-card" onclick="navigateToPage('planner')">
+            <div class="gateway-icon" style="background: var(--pastel-green);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2.5"><path d="M12 20V10M18 20V4M6 20v-6"></path></svg>
             </div>
-            <h3 class="feature-title">Deficit-First Prioritization</h3>
-            <p class="feature-desc">
-              Zones below the 25% target moisture threshold receive water in ascending order (driest zone first). Crops under high drought stress are stabilized before water runs out.
-            </p>
+            <div class="gateway-title">1. TWO-COLUMN PLANNER</div>
+            <p class="gateway-desc">Input zone soil moistures &amp; budget. Computes the optimal valve priority sequence in real-time.</p>
           </div>
 
-          <div class="feature-card">
-            <div class="feature-icon-badge" style="background: var(--pastel-blue);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2.5"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+          <div class="pixel-gateway-card" onclick="navigateToPage('comparison')">
+            <div class="gateway-icon" style="background: var(--pastel-blue);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2.5"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
             </div>
-            <h3 class="feature-title">Sensor Fault Protection</h3>
-            <p class="feature-desc">
-              Blank or missing sensor readings allocate 0 L and explicitly flag "Check this zone before watering", stopping blind irrigation of unverified soil lines.
-            </p>
+            <div class="gateway-title">2. SCHEDULE BENCHMARK</div>
+            <p class="gateway-desc">See the side-by-side math proving litres spared from saturated soil and stored in the tank.</p>
           </div>
 
-          <div class="feature-card">
-            <div class="feature-icon-badge" style="background: var(--pastel-yellow);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <div class="pixel-gateway-card" onclick="navigateToPage('rules')">
+            <div class="gateway-icon" style="background: var(--pastel-yellow);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
             </div>
-            <h3 class="feature-title">Transparent Benchmarking</h3>
-            <p class="feature-desc">
-              Direct side-by-side comparison with the standard equal-split schedule demonstrates exact litres redirected from saturated zones to thirsty crops.
-            </p>
+            <div class="gateway-title">3. SIMULATION RULES</div>
+            <p class="gateway-desc">Transparent walkthrough of the simulated 25% target, 20 L/10 L dosage tiers, and sensor rules.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= PAGE 2: TWO-COLUMN PLANNER (Matches Wireframe) ================= -->
+    <!-- =============================================================
+         PAGE 2: LIVE PLANNER (STREAMLINED, ORGANIZED TWO-COLUMN LAYOUT)
+    ============================================================== -->
     <section id="pagePlanner" class="page-section">
       <main class="two-column-layout">
 
-        <!-- LEFT COLUMN: SIDEBAR CONTROLS -->
+        <!-- LEFT COLUMN: STREAMLINED CONTROLS -->
         <aside class="sidebar-panel">
           <section class="neo-card" aria-labelledby="sidebarHeading">
             <h2 id="sidebarHeading" class="panel-header-title">
@@ -1161,13 +1174,12 @@
               Starting Conditions
             </h2>
             <p class="panel-header-sub">
-              Adjust soil moisture levels (0–100%) and daily water supply:
+              Enter zone moisture % and today's water budget:
             </p>
 
             <form id="irrigationForm" onsubmit="event.preventDefault(); handleMakePlan();" novalidate>
               <!-- QUICK PRESETS -->
-              <div class="presets-group" aria-label="Judge Test Scenarios">
-                <span class="presets-caption">Quick Scenarios:</span>
+              <div class="presets-group" aria-label="Judge Quick Scenarios">
                 <button type="button" class="btn-preset" onclick="loadScenario('default')">Default (30 L)</button>
                 <button type="button" class="btn-preset" onclick="loadScenario('missingC')">Missing Sensor C</button>
                 <button type="button" class="btn-preset" onclick="loadScenario('budget15')">15 L Budget</button>
@@ -1267,7 +1279,7 @@
               <!-- WATER BUDGET CARD -->
               <div class="budget-card">
                 <div class="zone-card-top">
-                  <span class="zone-name">💧 Today's Water Budget</span>
+                  <span class="zone-name">💧 Water Budget</span>
                   <span style="font-size: 0.72rem; font-weight: 800; color: var(--ink-muted);">Whole Litres</span>
                 </div>
                 <div class="input-wrapper">
@@ -1300,21 +1312,19 @@
             </form>
           </section>
 
-          <!-- ERROR BANNER -->
+          <!-- ERROR WITHHOLD BANNER -->
           <div id="withholdBanner" class="withhold-banner" role="alert">
             <strong>⚠️ Planning Paused:</strong> Please fix the marked inputs above. A plan cannot be generated until all readings and the water budget are valid.
           </div>
         </aside>
 
-        <!-- RIGHT COLUMN: RESULTS DASHBOARD -->
+        <!-- RIGHT COLUMN: STREAMLINED RESULTS DASHBOARD -->
         <section class="main-content-panel">
-          <div id="resultsSection" style="display: flex; flex-direction: column; gap: 18px;">
+          <div id="resultsSection" style="display: flex; flex-direction: column; gap: 14px;">
 
             <!-- 1. HERO REDIRECTION HIGHLIGHT CARD -->
             <article class="hero-redirection-card" aria-labelledby="redirectionTitle">
-              <div class="redirection-badge-wrap">
-                <span class="badge-insight">✨ Redirection Analysis</span>
-              </div>
+              <span class="badge-insight">✨ Redirection Analysis</span>
               <h2 id="redirectionTitle" class="redirection-headline">
                 <span id="redirectionMessage">10 L redirected from an already-moist zone to the driest zone.</span>
               </h2>
@@ -1324,13 +1334,13 @@
             </article>
 
             <!-- 2. RECOMMENDED WATERING SEQUENCE -->
-            <article class="sequence-panel" aria-labelledby="sequenceTitle">
-              <h2 id="sequenceTitle" class="panel-header-title" style="margin-bottom: 2px;">
+            <article class="neo-card" aria-labelledby="sequenceTitle">
+              <h2 id="sequenceTitle" class="panel-header-title">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                Recommended Watering Priority Sequence
+                Watering Priority Sequence
               </h2>
               <p class="panel-header-sub" style="margin-bottom: 0;">
-                Execute in this order to protect the most stressed crops before today's water supply is depleted:
+                Execute valves in this order to protect the most stressed crops first:
               </p>
 
               <div id="wateringSequence" class="sequence-cards-grid" aria-live="polite">
@@ -1339,19 +1349,16 @@
             </article>
 
             <!-- 3. SIDE-BY-SIDE SCHEDULE COMPARISON -->
-            <article class="comparison-panel" aria-labelledby="compTitle">
+            <article class="neo-card" aria-labelledby="compTitle">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h2 id="compTitle" class="panel-header-title" style="margin-bottom: 2px;">
+                <h2 id="compTitle" class="panel-header-title">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2.5"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
-                  Usual vs. Recommended Schedule Comparison
+                  Schedule Comparison
                 </h2>
                 <button type="button" class="btn-preset" onclick="navigateToPage('comparison')">
-                  Expand Tank View &rarr;
+                  Tank View &rarr;
                 </button>
               </div>
-              <p class="panel-header-sub" style="margin-bottom: 0;">
-                Side-by-side comparison between the conventional equal-split schedule and the priority recommendation:
-              </p>
 
               <div id="comparisonCardsContainer" class="comp-rows-list">
                 <!-- Dynamically populated comparison rows -->
@@ -1368,15 +1375,15 @@
                   <span class="cell-label">Total Water Allocated</span>
                   <div class="metric-value-row">
                     <div>
-                      <span style="font-size: 0.8rem; color: var(--ink-muted); font-weight: 800;">Usual: </span>
+                      <span style="font-size: 0.78rem; color: var(--ink-muted); font-weight: 800;">Usual: </span>
                       <span id="usualTotalAlloc" class="stat-number">30 L</span>
                     </div>
                     <div>
-                      <span style="font-size: 0.8rem; color: #047857; font-weight: 800;">Recommended: </span>
+                      <span style="font-size: 0.78rem; color: #047857; font-weight: 800;">Recommended: </span>
                       <span id="recTotalAlloc" class="stat-number" style="color: #047857;">30 L</span>
                     </div>
                   </div>
-                  <span id="allocComparisonSummary" style="font-size: 0.78rem; color: var(--ink-muted); font-weight: 600; margin-top: 4px;">
+                  <span id="allocComparisonSummary" style="font-size: 0.74rem; color: var(--ink-muted); font-weight: 600; margin-top: 2px;">
                     All allocated water is actively targeted at verified crop deficits.
                   </span>
                 </div>
@@ -1385,15 +1392,15 @@
                   <span class="cell-label">Water Left in Storage Tank</span>
                   <div class="metric-value-row">
                     <div>
-                      <span style="font-size: 0.8rem; color: var(--ink-muted); font-weight: 800;">Usual: </span>
+                      <span style="font-size: 0.78rem; color: var(--ink-muted); font-weight: 800;">Usual: </span>
                       <span id="usualWaterLeft" class="stat-number">0 L</span>
                     </div>
                     <div>
-                      <span style="font-size: 0.8rem; color: #0284c7; font-weight: 800;">Recommended: </span>
+                      <span style="font-size: 0.78rem; color: #0284c7; font-weight: 800;">Recommended: </span>
                       <span id="recWaterLeft" class="stat-number" style="color: #0284c7;">0 L</span>
                     </div>
                   </div>
-                  <span id="reserveSummary" style="font-size: 0.78rem; color: var(--ink-muted); font-weight: 600; margin-top: 4px;">
+                  <span id="reserveSummary" style="font-size: 0.74rem; color: var(--ink-muted); font-weight: 600; margin-top: 2px;">
                     Entire water budget was allocated to active deficits.
                   </span>
                 </div>
@@ -1405,125 +1412,121 @@
       </main>
     </section>
 
-    <!-- ================= PAGE 3: SCHEDULE COMPARISON & TANK LAYOUT ================= -->
+    <!-- =============================================================
+         PAGE 3: SCHEDULE COMPARISON & TANK LAYOUT
+    ============================================================== -->
     <section id="pageComparison" class="page-section">
-      <div class="comparison-layout">
-        <div class="neo-card">
-          <h2 class="panel-header-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2.5"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
-            Storage Tank &amp; Schedule Analytics
-          </h2>
-          <p class="panel-header-sub">
-            Visualize how water reserves are protected and compare plan distributions:
-          </p>
+      <div class="neo-card">
+        <h2 class="panel-header-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2.5"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
+          Storage Tank &amp; Schedule Analytics
+        </h2>
+        <p class="panel-header-sub">
+          Visualize how water reserves are protected and compare plan distributions:
+        </p>
 
-          <div class="tank-showcase-grid" style="margin-top: 16px;">
-            <div class="tank-box">
-              <span class="cell-label">Tank Reservoir</span>
-              <div class="tank-cylinder">
-                <div id="tankFluidPage3" class="tank-fluid-fill" style="height: 100%;"></div>
-              </div>
-              <div style="font-weight: 900; font-size: 1.15rem; color: var(--ink);" id="tankLabelBudget">
-                30 L Budget
-              </div>
-              <div style="font-size: 0.82rem; color: var(--ink-muted); font-weight: 700;" id="tankLabelReserve">
-                0 L Left in Reserve
-              </div>
+        <div class="tank-showcase-grid">
+          <div class="tank-box">
+            <span class="cell-label">Tank Reservoir</span>
+            <div class="tank-cylinder">
+              <div id="tankFluidPage3" class="tank-fluid-fill" style="height: 100%;"></div>
             </div>
-
-            <div style="display: flex; flex-direction: column; gap: 14px;">
-              <div class="rule-box-card" style="background: var(--pastel-green-light);">
-                <strong>💧 Smart Water Redirection Benefit</strong>
-                <p>
-                  Instead of indiscriminately pouring equal fractions into every zone, the priority planner identifies zones with soil moisture &ge; 25% (Target) and prevents wasteful water application.
-                </p>
-              </div>
-
-              <div class="rule-box-card" style="background: var(--pastel-yellow-light);">
-                <strong>🛡️ Moisture Target Buffer</strong>
-                <p>
-                  Zones between 20% and 24% are topped up with a moderate 10 L dose, while severe drought zones (<20%) receive up to 20 L to restore root vitality.
-                </p>
-              </div>
-
-              <button type="button" class="neo-btn btn-primary" onclick="navigateToPage('planner')">
-                &larr; Return to Live Planner
-              </button>
+            <div style="font-weight: 900; font-size: 1.15rem; color: var(--ink);" id="tankLabelBudget">
+              30 L Budget
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= PAGE 4: DECISION RULES LAYOUT ================= -->
-    <section id="pageRules" class="page-section">
-      <div class="rules-page-layout">
-        <div class="neo-card">
-          <h2 class="panel-header-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            Simulated Decision Heuristics &amp; Rules
-          </h2>
-          <p class="panel-header-sub">
-            Complete, transparent documentation of the simulation rules governing this prototype:
-          </p>
-
-          <div class="rules-grid-full" style="margin-top: 16px;">
-            <div class="rule-box-card">
-              <strong>🎯 25% Moisture Target</strong>
-              <p>
-                Soil readings at or above 25% are marked optimal. These zones request 0 L, sparing water from being wasted on saturated roots.
-              </p>
-            </div>
-
-            <div class="rule-box-card">
-              <strong>🚨 Critical Deficit (&lt; 20%)</strong>
-              <p>
-                Requests a simulated dose of up to 20 L. Placed at top priority to rescue dehydrated plant root systems immediately.
-              </p>
-            </div>
-
-            <div class="rule-box-card">
-              <strong>⚠️ Moderate Deficit (20% to &lt; 25%)</strong>
-              <p>
-                Requests a simulated dose of up to 10 L. Restores soil back to a safe buffer threshold.
-              </p>
-            </div>
-
-            <div class="rule-box-card">
-              <strong>🔍 Missing Sensor Protection</strong>
-              <p>
-                Blank readings allocate 0 L and explicitly flag "Check this zone before watering". Protects against irrigation line breaks or blind watering.
-              </p>
-            </div>
-
-            <div class="rule-box-card">
-              <strong>🏆 Priority Sorting &amp; Tie-Breakers</strong>
-              <p>
-                Water is allocated to eligible zones from lowest moisture to highest. Equal readings break ties in alphabetical order (A &rarr; B &rarr; C). Partial doses are shown when the budget runs out.
-              </p>
-            </div>
-
-            <div class="rule-box-card">
-              <strong>⚖️ Usual Schedule Baseline</strong>
-              <p>
-                Divides budget equally across all 3 zones (<code>Math.floor(budget / 3)</code>) with whole-litre remainders distributed in A, then B order.
-              </p>
+            <div style="font-size: 0.82rem; color: var(--ink-muted); font-weight: 700;" id="tankLabelReserve">
+              0 L Left in Reserve
             </div>
           </div>
 
-          <div style="margin-top: 20px;">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="rule-box-card" style="background: var(--pastel-green-light);">
+              <strong>💧 Smart Water Redirection Benefit</strong>
+              <p>
+                Instead of indiscriminately pouring equal fractions into every zone, the priority planner identifies zones with soil moisture &ge; 25% (Target) and prevents wasteful water application.
+              </p>
+            </div>
+
+            <div class="rule-box-card" style="background: var(--pastel-yellow-light);">
+              <strong>🛡️ Moisture Target Buffer</strong>
+              <p>
+                Zones between 20% and 24% are topped up with a moderate 10 L dose, while severe drought zones (&lt;20%) receive up to 20 L to restore root vitality.
+              </p>
+            </div>
+
             <button type="button" class="neo-btn btn-primary" onclick="navigateToPage('planner')">
-              ⚡ Open Live Planner &rarr;
+              &larr; Return to Live Planner
             </button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer>
-      Desert Irrigation Planner &bull; Hackathon Prototype &bull; Aesthetic Neobrutalism Design &bull; Works 100% Offline
-    </footer>
+    <!-- =============================================================
+         PAGE 4: DECISION RULES LAYOUT
+    ============================================================== -->
+    <section id="pageRules" class="page-section">
+      <div class="neo-card">
+        <h2 class="panel-header-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          Simulated Decision Heuristics &amp; Rules
+        </h2>
+        <p class="panel-header-sub">
+          Complete, transparent documentation of the simulation rules governing this prototype:
+        </p>
+
+        <div class="rules-grid-full">
+          <div class="rule-box-card">
+            <strong>🎯 25% Moisture Target</strong>
+            <p>
+              Soil readings at or above 25% are marked optimal. These zones request 0 L, sparing water from being wasted on saturated roots.
+            </p>
+          </div>
+
+          <div class="rule-box-card">
+            <strong>🚨 Critical Deficit (&lt; 20%)</strong>
+            <p>
+              Requests a simulated dose of up to 20 L. Placed at top priority to rescue dehydrated plant root systems immediately.
+            </p>
+          </div>
+
+          <div class="rule-box-card">
+            <strong>⚠️ Moderate Deficit (20% to &lt; 25%)</strong>
+            <p>
+              Requests a simulated dose of up to 10 L. Restores soil back to a safe buffer threshold.
+            </p>
+          </div>
+
+          <div class="rule-box-card">
+            <strong>🔍 Missing Sensor Protection</strong>
+            <p>
+              Blank readings allocate 0 L and explicitly flag "Check this zone before watering". Protects against irrigation line breaks or blind watering.
+            </p>
+          </div>
+
+          <div class="rule-box-card">
+            <strong>🏆 Priority Sorting &amp; Tie-Breakers</strong>
+            <p>
+              Water is allocated to eligible zones from lowest moisture to highest. Equal readings break ties in alphabetical order (A &rarr; B &rarr; C). Partial doses are shown when the budget runs out.
+            </p>
+          </div>
+
+          <div class="rule-box-card">
+            <strong>⚖️ Usual Schedule Baseline</strong>
+            <p>
+              Divides budget equally across all 3 zones (<code>Math.floor(budget / 3)</code>) with whole-litre remainders distributed in A, then B order.
+            </p>
+          </div>
+        </div>
+
+        <div style="margin-top: 18px;">
+          <button type="button" class="neo-btn btn-primary" onclick="navigateToPage('planner')">
+            ⚡ Open Live Planner &rarr;
+          </button>
+        </div>
+      </div>
+    </section>
+
   </div>
 
   <script>
@@ -1910,7 +1913,7 @@
 
       if (moistZones.length === 1 && moistWaterUsual > 0 && gains.length === 1 && gains[0].zone === driestZone && gains[0].gain === moistWaterUsual) {
         headline = `${moistWaterUsual} L redirected from an already-moist zone to the driest zone.`;
-        subline = `Zone ${moistZones[0]} is at ${moistureData[moistZones[0]].value}% (≥25% target). Its usual ${usualPlan.alloc[moistZones[0]]} L allocation was redirected entirely to Zone ${driestZone} (${minMoist}% moisture), delivering water where soil deficit is most severe.`;
+        subline = `Zone ${moistZones[0]} is at ${moistureData[moistZones[0]].value}% (≥25% target). Its usual ${usualPlan.alloc[moistZones[0]]} L allocation was redirected entirely to Zone ${driestZone} (${minMoist}% moisture), ensuring water is delivered where soil deficit is most severe.`;
         return { headline, subline };
       }
 
@@ -2059,7 +2062,7 @@
 
           <div>
             <span class="cell-label">Decision Reason</span>
-            <div style="font-size: 0.86rem; font-weight: 800; color: var(--ink); margin-top: 2px;">
+            <div style="font-size: 0.85rem; font-weight: 800; color: var(--ink); margin-top: 2px;">
               ${rec.finalReason}
             </div>
             <div style="font-size: 0.75rem; color: var(--ink-muted); font-weight: 600; margin-top: 2px;">
